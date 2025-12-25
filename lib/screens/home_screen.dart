@@ -5,6 +5,7 @@ import 'package:thriftly_app/widgets/product_card.dart';
 import 'package:thriftly_app/widgets/category_chip.dart';
 import 'package:thriftly_app/widgets/promo_banner.dart';
 import 'package:thriftly_app/screens/upload_product_screen.dart';
+import 'package:thriftly_app/screens/search_filter_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -217,12 +218,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 onTap: () {
-                  // TODO: Navigate to search screen
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Search screen coming soon! 🔍'),
-                      duration: Duration(seconds: 1),
-                      behavior: SnackBarBehavior.floating,
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SearchFilterScreen(),
                     ),
                   );
                 },
@@ -241,12 +240,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12),
                   onTap: () {
-                    // TODO: Navigate to filter screen
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Filter coming soon! 🎛️'),
-                        duration: Duration(seconds: 1),
-                        behavior: SnackBarBehavior.floating,
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SearchFilterScreen(),
                       ),
                     );
                   },

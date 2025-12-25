@@ -26,7 +26,7 @@ class CategoryChip extends StatelessWidget {
           boxShadow: [
             if (isSelected)
               BoxShadow(
-                color: AppTheme.textMain.withOpacity(0.2),
+                color: AppTheme.textMain.withValues(alpha:0.2),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),

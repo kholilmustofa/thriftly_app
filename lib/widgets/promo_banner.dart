@@ -23,11 +23,11 @@ class PromoBanner extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [color, color.withOpacity(0.7)],
+          colors: [color, color.withValues(alpha: 0.7)],
         ),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.3),
+            color: color.withValues(alpha: 0.3),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
@@ -89,7 +89,7 @@ class PromoBanner extends StatelessWidget {
                 Text(
                   subtitle,
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white.withValues(alpha: 0.9),
                     fontSize: 14,
                   ),
                 ),
