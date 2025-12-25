@@ -554,7 +554,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
         ),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
-          value: value,
+          initialValue: value,
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,
