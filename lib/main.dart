@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:thriftly_app/config/app_theme.dart';
 import 'package:thriftly_app/screens/splash_screen.dart';

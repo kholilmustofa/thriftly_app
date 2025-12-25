@@ -4,6 +4,7 @@ import 'package:thriftly_app/models/product.dart';
 import 'package:thriftly_app/widgets/product_card.dart';
 import 'package:thriftly_app/widgets/category_chip.dart';
 import 'package:thriftly_app/widgets/promo_banner.dart';
+import 'package:thriftly_app/screens/upload_product_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -91,7 +92,12 @@ class _HomeScreenState extends State<HomeScreen> {
           child: InkWell(
             borderRadius: BorderRadius.circular(16),
             onTap: () {
-              // TODO: Navigate to upload product screen
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const UploadProductScreen(),
+                ),
+              );
             },
             child: const Icon(Icons.add, color: Colors.white, size: 28),
           ),
