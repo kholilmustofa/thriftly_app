@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Thriftly - Splash Screen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#19e680",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#112119",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom animation for entrance */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-up {
+            animation: fadeUp 0.8s ease-out forwards;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display">
+<!-- Option A: Bold Green Background Splash Screen -->
+<div class="relative flex h-screen w-full flex-col items-center justify-center bg-primary overflow-hidden">
+<!-- Decorative Pattern (Subtle) -->
+<div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 24px 24px;"></div>
+<!-- Main Content -->
+<div class="z-10 flex flex-col items-center gap-6 animate-fade-up">
+<!-- Logo Container -->
+<div class="flex items-center justify-center p-6 bg-white rounded-full shadow-lg">
+<!-- Using a shopping bag/hanger concept icon -->
+<span class="material-symbols-outlined text-primary" style="font-size: 64px; font-weight: 600;">checkroom</span>
+</div>
+<!-- Text Content -->
+<div class="text-center">
+<h1 class="text-white tracking-tight text-[40px] font-extrabold leading-tight mb-2 drop-shadow-sm">Thriftly</h1>
+<p class="text-white/90 text-lg font-medium tracking-wide uppercase text-sm">Fashion. Circulated.</p>
+</div>
+</div>
+<!-- Bottom Loading Indicator -->
+<div class="absolute bottom-12 flex items-center justify-center gap-2">
+<div class="h-2 w-2 rounded-full bg-white animate-bounce" style="animation-delay: 0s;"></div>
+<div class="h-2 w-2 rounded-full bg-white animate-bounce" style="animation-delay: 0.15s;"></div>
+<div class="h-2 w-2 rounded-full bg-white animate-bounce" style="animation-delay: 0.3s;"></div>
+</div>
+</div>
+<!-- 
+    Alternative layout included below for demonstration of Option B (Clean/White) 
+    Uncomment the block below to view the light version, or toggle logic in a real app.
+    For this single page output, I'm displaying the primary option requested.
+    -->
+<!-- 
+    <div class="relative flex h-screen w-full flex-col items-center justify-center bg-background-light dark:bg-background-dark overflow-hidden hidden">
+        <div class="z-10 flex flex-col items-center gap-5">
+            <div class="flex items-center justify-center h-24 w-24 bg-primary rounded-xl shadow-lg rotate-3 hover:rotate-0 transition-transform duration-500">
+                <span class="material-symbols-outlined text-white" style="font-size: 48px;">recycling</span>
+            </div>
+            <div class="text-center mt-4">
+                <h1 class="text-[#111814] dark:text-white tracking-light text-[32px] font-bold leading-tight">Thriftly</h1>
+                <h2 class="text-[#111814]/60 dark:text-white/60 text-sm font-medium tracking-widest uppercase mt-1">Sustainable Fashion</h2>
+            </div>
+        </div>
+    </div>
+    -->
+</body></html>

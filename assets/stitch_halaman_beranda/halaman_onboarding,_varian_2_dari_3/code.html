@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Onboarding - Fashion Berkelanjutan</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Noto+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#19e680",
+              "background-light": "#f6f8f7",
+              "background-dark": "#112119",
+            },
+            fontFamily: {
+              "display": ["Plus Jakarta Sans", "sans-serif"],
+              "body": ["Noto Sans", "sans-serif"]
+            },
+            borderRadius: {
+              "DEFAULT": "0.25rem", 
+              "lg": "0.5rem", 
+              "xl": "0.75rem", 
+              "2xl": "1rem",
+              "3xl": "1.5rem",
+              "4xl": "2rem",
+              "full": "9999px"
+            },
+            screens: {
+              'xs': '375px',
+            }
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#111814] dark:text-white antialiased selection:bg-primary selection:text-black overflow-hidden">
+<div class="relative flex h-screen w-full flex-col justify-between">
+<!-- Top Image Section (Approx 60% height) -->
+<div class="relative h-[60vh] w-full shrink-0">
+<!-- Full bleed image -->
+<div class="absolute inset-0 h-full w-full bg-cover bg-center bg-no-repeat" data-alt="Vibrant illustration of diverse people wearing stylish thrifted fashion" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCJcXhoYKdV6KzcIivQW-UXxBkthOnEt6TvxahsZCbcIrg8Mr4mnSAl2gq7HB0joehqqi3wB0TPhDdW6Q7V5gcQzhbJuA2_qVvPcrHRN6MBtoqFIx4KPgBwerXpU4gi39FkRzSETlwDA9eHwqIBvd4fa9X-ZIx4Uy9eLR9J7AVsTqYFRBzS30D6E1va0SgUpS_x6RF7M4F1O61zCncIxwse7StvlEdGhqC9sKOGAEeM65dLImrjOxCgeB4UpDOaYcOEHfkIIaFWubQ');">
+<!-- Gradient Overlay for subtle depth at the bottom of image -->
+<div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/20 to-transparent"></div>
+</div>
+<!-- Skip Button (Secondary Action) -->
+<!-- Positioned at top right, accounting for iOS status bar safe area (approx pt-12/14) -->
+<div class="absolute top-0 right-0 z-20 p-6 pt-14">
+<button class="group flex items-center justify-center rounded-full bg-white/20 px-4 py-2 text-sm font-bold text-white backdrop-blur-md transition-all hover:bg-white/30 active:scale-95">
+<span class="tracking-wide">Lewati</span>
+</button>
+</div>
+</div>
+<!-- Bottom Content Sheet -->
+<!-- Negative margin pulls this up over the image -->
+<div class="relative z-10 flex flex-1 -mt-10 flex-col items-center rounded-t-[2.5rem] bg-background-light dark:bg-background-dark px-6 pt-10 pb-8 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+<!-- Pagination Indicators -->
+<div class="mb-6 flex w-full flex-row items-center justify-center gap-2">
+<!-- Dot 1 -->
+<div class="h-2.5 w-2.5 rounded-full bg-[#dce5e0] dark:bg-white/10 transition-colors"></div>
+<!-- Dot 2 (Active - Variant 2) -->
+<div class="h-2.5 w-8 rounded-full bg-primary transition-all"></div>
+<!-- Dot 3 -->
+<div class="h-2.5 w-2.5 rounded-full bg-[#dce5e0] dark:bg-white/10 transition-colors"></div>
+</div>
+<!-- Text Content -->
+<div class="flex flex-col items-center text-center">
+<h1 class="mb-4 text-3xl font-extrabold leading-tight tracking-tight text-[#111814] dark:text-white sm:text-4xl">
+                Fashion Berkelanjutan
+            </h1>
+<p class="max-w-xs text-base font-medium leading-relaxed text-gray-600 dark:text-gray-300 sm:text-lg">
+                Dapatkan pakaian bermerek dengan harga miring sambil menjaga bumi. Thrifting bukan sekadar hemat, tapi juga gaya hidup peduli lingkungan.
+            </p>
+</div>
+<!-- Bottom Action Button -->
+<div class="mt-auto w-full pb-4"> <!-- pb-4 for home indicator safe area spacing -->
+<button class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl bg-primary py-4 text-base font-bold tracking-wide text-[#052e16] shadow-lg shadow-primary/20 transition-all hover:brightness-105 active:scale-[0.98]">
+<span>Lanjut</span>
+<span class="material-symbols-outlined text-lg font-bold">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</body></html>

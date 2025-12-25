@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pencarian &amp; Filter - Thrift Shop</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#19e680",
+              "background-light": "#f6f8f7",
+              "background-dark": "#112119",
+              "surface-light": "#ffffff",
+              "surface-dark": "#1c2c24",
+            },
+            fontFamily: {
+              "display": ["Plus Jakarta Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        /* Custom scrollbar hiding for clean UI */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Custom styles for range slider simulation */
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 2px solid #19e680;
+            cursor: pointer;
+            margin-top: -8px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #e5e7eb;
+            border-radius: 2px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#111814] dark:text-white transition-colors duration-200">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-x-hidden max-w-md mx-auto shadow-2xl bg-background-light dark:bg-background-dark">
+<!-- Top App Bar -->
+<div class="sticky top-0 z-50 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md transition-colors">
+<div class="flex items-center p-4 pb-2 justify-between">
+<button class="text-[#111814] dark:text-white flex size-12 shrink-0 items-center justify-start hover:opacity-70 transition-opacity">
+<span class="material-symbols-outlined" style="font-size: 24px;">arrow_back</span>
+</button>
+<h2 class="text-[#111814] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Pencarian</h2>
+</div>
+<!-- Search Bar -->
+<div class="px-4 py-2">
+<label class="flex flex-col w-full">
+<div class="flex w-full items-center rounded-xl h-12 bg-white dark:bg-surface-dark shadow-sm border border-gray-100 dark:border-gray-800 transition-colors">
+<div class="text-gray-400 dark:text-gray-500 flex items-center justify-center pl-4">
+<span class="material-symbols-outlined" style="font-size: 24px;">search</span>
+</div>
+<input class="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl bg-transparent text-[#111814] dark:text-white focus:outline-0 focus:ring-0 border-none h-full placeholder:text-gray-400 dark:placeholder:text-gray-500 px-3 text-base font-normal leading-normal" placeholder="Cari kaos vintage, jaket..." value=""/>
+<button class="pr-4 text-gray-400 dark:text-gray-500 hover:text-primary dark:hover:text-primary transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">tune</span>
+</button>
+</div>
+</label>
+</div>
+<!-- Quick Filter Chips -->
+<div class="flex gap-2 px-4 py-3 overflow-x-auto no-scrollbar items-center">
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary text-black px-5 shadow-sm shadow-primary/20 transition-transform active:scale-95">
+<p class="text-sm font-bold leading-normal">Semua</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-700 px-5 transition-colors hover:border-primary/50">
+<p class="text-[#111814] dark:text-gray-300 text-sm font-medium leading-normal">Pria</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-700 px-5 transition-colors hover:border-primary/50">
+<p class="text-[#111814] dark:text-gray-300 text-sm font-medium leading-normal">Wanita</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-700 px-5 transition-colors hover:border-primary/50">
+<p class="text-[#111814] dark:text-gray-300 text-sm font-medium leading-normal">Obral</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-700 px-5 transition-colors hover:border-primary/50">
+<p class="text-[#111814] dark:text-gray-300 text-sm font-medium leading-normal">Vintage</p>
+</button>
+</div>
+<!-- Separator Gradient -->
+<div class="h-4 w-full bg-gradient-to-b from-background-light dark:from-background-dark to-transparent opacity-10"></div>
+</div>
+<!-- Filter Content -->
+<div class="px-4 pb-20">
+<div class="flex items-center justify-between pt-4 pb-2">
+<h3 class="text-[#111814] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">Filter Lanjutan</h3>
+<button class="text-sm text-primary font-semibold">Reset</button>
+</div>
+<div class="flex flex-col gap-3 mt-2">
+<!-- Price Range Accordion -->
+<details class="flex flex-col rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-surface-dark px-[15px] py-2 group shadow-sm" open="">
+<summary class="flex cursor-pointer items-center justify-between gap-6 py-3 list-none">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-gray-500" style="font-size: 20px;">payments</span>
+<p class="text-[#111814] dark:text-white text-sm font-bold leading-normal">Rentang Harga</p>
+</div>
+<span class="material-symbols-outlined text-gray-400 group-open:rotate-180 transition-transform" style="font-size: 24px;">expand_more</span>
+</summary>
+<div class="pb-4 pt-2 px-1">
+<div class="flex justify-between text-xs font-medium text-gray-500 dark:text-gray-400 mb-4">
+<span>Rp 50rb</span>
+<span class="text-[#111814] dark:text-white font-bold">Rp 150rb - Rp 850rb</span>
+<span>Rp 2jt+</span>
+</div>
+<div class="relative h-6 w-full">
+<div class="absolute top-[9px] left-0 right-0 h-1 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+<div class="absolute top-[9px] left-[20%] right-[30%] h-1 bg-primary rounded-full"></div>
+<!-- Fake Slider Handles -->
+<div class="absolute top-0 left-[20%] h-5 w-5 bg-white border-2 border-primary rounded-full shadow-md cursor-pointer hover:scale-110 transition-transform"></div>
+<div class="absolute top-0 right-[30%] h-5 w-5 bg-white border-2 border-primary rounded-full shadow-md cursor-pointer hover:scale-110 transition-transform"></div>
+</div>
+</div>
+</details>
+<!-- Size Accordion -->
+<details class="flex flex-col rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-surface-dark px-[15px] py-2 group shadow-sm">
+<summary class="flex cursor-pointer items-center justify-between gap-6 py-3 list-none">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-gray-500" style="font-size: 20px;">straighten</span>
+<p class="text-[#111814] dark:text-white text-sm font-bold leading-normal">Ukuran</p>
+</div>
+<span class="material-symbols-outlined text-gray-400 group-open:rotate-180 transition-transform" style="font-size: 24px;">expand_more</span>
+</summary>
+<div class="pb-4 pt-2">
+<div class="grid grid-cols-4 gap-3">
+<button class="h-10 rounded-lg border border-gray-200 dark:border-gray-700 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-300">S</button>
+<button class="h-10 rounded-lg bg-primary/20 border border-primary text-primary-dark font-bold text-sm">M</button>
+<button class="h-10 rounded-lg border border-gray-200 dark:border-gray-700 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-300">L</button>
+<button class="h-10 rounded-lg border border-gray-200 dark:border-gray-700 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-300">XL</button>
+</div>
+</div>
+</details>
+<!-- Condition Accordion -->
+<details class="flex flex-col rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-surface-dark px-[15px] py-2 group shadow-sm">
+<summary class="flex cursor-pointer items-center justify-between gap-6 py-3 list-none">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-gray-500" style="font-size: 20px;">verified</span>
+<p class="text-[#111814] dark:text-white text-sm font-bold leading-normal">Kondisi</p>
+</div>
+<span class="material-symbols-outlined text-gray-400 group-open:rotate-180 transition-transform" style="font-size: 24px;">expand_more</span>
+</summary>
+<div class="pb-4 pt-2 flex flex-col gap-3">
+<label class="flex items-center gap-3 cursor-pointer">
+<div class="relative flex items-center">
+<input checked="" class="peer h-5 w-5 cursor-pointer appearance-none rounded border border-gray-300 dark:border-gray-600 bg-transparent checked:bg-primary checked:border-primary transition-all" type="checkbox"/>
+<span class="material-symbols-outlined absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100 pointer-events-none" style="font-size: 16px;">check</span>
+</div>
+<span class="text-sm text-gray-700 dark:text-gray-300">Seperti Baru (Like New)</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer">
+<div class="relative flex items-center">
+<input class="peer h-5 w-5 cursor-pointer appearance-none rounded border border-gray-300 dark:border-gray-600 bg-transparent checked:bg-primary checked:border-primary transition-all" type="checkbox"/>
+<span class="material-symbols-outlined absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100 pointer-events-none" style="font-size: 16px;">check</span>
+</div>
+<span class="text-sm text-gray-700 dark:text-gray-300">Bagus (Good Vintage)</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer">
+<div class="relative flex items-center">
+<input class="peer h-5 w-5 cursor-pointer appearance-none rounded border border-gray-300 dark:border-gray-600 bg-transparent checked:bg-primary checked:border-primary transition-all" type="checkbox"/>
+<span class="material-symbols-outlined absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100 pointer-events-none" style="font-size: 16px;">check</span>
+</div>
+<span class="text-sm text-gray-700 dark:text-gray-300">Layak Pakai (Thrifted)</span>
+</label>
+</div>
+</details>
+<!-- Color Accordion -->
+<details class="flex flex-col rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-surface-dark px-[15px] py-2 group shadow-sm">
+<summary class="flex cursor-pointer items-center justify-between gap-6 py-3 list-none">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-gray-500" style="font-size: 20px;">palette</span>
+<p class="text-[#111814] dark:text-white text-sm font-bold leading-normal">Warna</p>
+</div>
+<span class="material-symbols-outlined text-gray-400 group-open:rotate-180 transition-transform" style="font-size: 24px;">expand_more</span>
+</summary>
+<div class="pb-4 pt-2">
+<div class="flex gap-4 overflow-x-auto no-scrollbar py-1">
+<div class="group/color relative cursor-pointer">
+<div class="h-10 w-10 rounded-full bg-black border-2 border-transparent ring-2 ring-primary ring-offset-2 dark:ring-offset-surface-dark"></div>
+</div>
+<div class="group/color relative cursor-pointer">
+<div class="h-10 w-10 rounded-full bg-white border border-gray-300 dark:border-gray-600"></div>
+</div>
+<div class="group/color relative cursor-pointer">
+<div class="h-10 w-10 rounded-full bg-blue-600"></div>
+</div>
+<div class="group/color relative cursor-pointer">
+<div class="h-10 w-10 rounded-full bg-red-500"></div>
+</div>
+<div class="group/color relative cursor-pointer">
+<div class="h-10 w-10 rounded-full bg-yellow-400"></div>
+</div>
+<div class="group/color relative cursor-pointer">
+<div class="h-10 w-10 rounded-full bg-green-600"></div>
+</div>
+</div>
+</div>
+</details>
+</div>
+<!-- Suggestion / Results Section -->
+<div class="mt-8 mb-6">
+<h3 class="text-[#111814] dark:text-white text-lg font-bold leading-tight mb-4">Rekomendasi untukmu</h3>
+<div class="grid grid-cols-2 gap-4">
+<!-- Product Card 1 -->
+<div class="group relative flex flex-col overflow-hidden rounded-xl bg-white dark:bg-surface-dark shadow-sm border border-gray-100 dark:border-gray-800 transition-all hover:shadow-md">
+<div class="aspect-[3/4] w-full overflow-hidden bg-gray-100 relative">
+<img alt="Vintage Jacket" class="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105" data-alt="Jaket windbreaker vintage warna-warni" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-L75_DzHnQdCk94AiQBdf3LpaDOR9Ylq7M7PSqVfFm9s9Uj17VO-QN-Tz2SoRBT5kIDRr6RbAGw8lVh1-6KMGoqegJDOCC8dlQdXseBLD-Z7YsG-Rk9A9IRYCpUgfGDwd3kNKOMKh4IJCbMQmNsAeTygtRLrx5ajGhdvjd0yLE4xBw7KeXXCrg5qUKu-6UaJcOku-a82BxLsfUd2oYm7ILNcMkpM0jPwbnY_WDFpiKlp9oHlQ0E3alS5zbqxuU5MiQXG7wiIDNlI"/>
+<div class="absolute top-2 right-2 rounded-full bg-white/80 p-1.5 backdrop-blur-sm shadow-sm cursor-pointer hover:bg-white text-gray-600 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined block" style="font-size: 18px;">favorite</span>
+</div>
+<div class="absolute bottom-2 left-2 rounded-md bg-black/60 px-2 py-1 backdrop-blur-sm">
+<span class="text-xs font-bold text-white uppercase">Size M</span>
+</div>
+</div>
+<div class="flex flex-col p-3">
+<p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Vintage Nike</p>
+<h4 class="text-sm font-bold text-[#111814] dark:text-white line-clamp-1">90s Windbreaker Colorblock</h4>
+<div class="mt-2 flex items-center justify-between">
+<span class="text-base font-bold text-primary">Rp 250rb</span>
+</div>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="group relative flex flex-col overflow-hidden rounded-xl bg-white dark:bg-surface-dark shadow-sm border border-gray-100 dark:border-gray-800 transition-all hover:shadow-md">
+<div class="aspect-[3/4] w-full overflow-hidden bg-gray-100 relative">
+<img alt="Vintage T-Shirt" class="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105" data-alt="Kaos putih vintage dengan grafis band" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHG2DnPAXOZ0YU85dxwS8ODzcvjhHkXRND19y-aQcM2FyRLQzaiqpJwaS_jtsFYs5Rk4z_S0TE2yra_3gsvqP_cFF1RCQ2qADLJvsQtaNoRmHuFUAKozwI7j5rXjzzXAH0qQPUK1KsXIQfM-KIaMdVVxT8QXZOSAHSn6b0VkmvZnnTdOphqp1gIO_gPgQlXNy96Ls8YXMNbjSFtku1juMWnRAJ23iDUpaajJAuUh2ZLtVkycd_LsvWIubRInzzpbws5KHt69xUv1o"/>
+<div class="absolute top-2 right-2 rounded-full bg-white/80 p-1.5 backdrop-blur-sm shadow-sm cursor-pointer hover:bg-white text-gray-600 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined block" style="font-size: 18px;">favorite</span>
+</div>
+<div class="absolute bottom-2 left-2 rounded-md bg-black/60 px-2 py-1 backdrop-blur-sm">
+<span class="text-xs font-bold text-white uppercase">Size L</span>
+</div>
+</div>
+<div class="flex flex-col p-3">
+<p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Harley Davidson</p>
+<h4 class="text-sm font-bold text-[#111814] dark:text-white line-clamp-1">Eagle Graphic Tee 2004</h4>
+<div class="mt-2 flex items-center justify-between">
+<span class="text-base font-bold text-primary">Rp 185rb</span>
+</div>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="group relative flex flex-col overflow-hidden rounded-xl bg-white dark:bg-surface-dark shadow-sm border border-gray-100 dark:border-gray-800 transition-all hover:shadow-md">
+<div class="aspect-[3/4] w-full overflow-hidden bg-gray-100 relative">
+<img alt="Denim Jacket" class="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105" data-alt="Jaket denim vintage biru pudar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwLmtHZ-JYqPAzu4uUeyuPzzPi8CAZczKdrJbkZdDaOqXQ8tcfTyNIKHizLNYvAYtUdAxIzZW7iJstEWq5hEz1pVhoApGlg1Km6YUThLkRK9WiOx2OQnkRz0JXbOLclDxRzhROlR9CL28cGLmQYGH7o9H5HoLzdDt7gUozrPh7oNql1ZR4FZ1KhtSNh0Ix7DzcT8ZJZ8kkOD2EeyPB86P5Ok92hLWSd8hM7NbfrbU-lxA5Vy56D-thKoc7HOtM2o7R-OhBprqW1kw"/>
+<div class="absolute top-2 right-2 rounded-full bg-white/80 p-1.5 backdrop-blur-sm shadow-sm cursor-pointer hover:bg-white text-gray-600 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined block" style="font-size: 18px;">favorite</span>
+</div>
+<div class="absolute bottom-2 left-2 rounded-md bg-black/60 px-2 py-1 backdrop-blur-sm">
+<span class="text-xs font-bold text-white uppercase">Size XL</span>
+</div>
+</div>
+<div class="flex flex-col p-3">
+<p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Levis</p>
+<h4 class="text-sm font-bold text-[#111814] dark:text-white line-clamp-1">Type III Trucker Jacket</h4>
+<div class="mt-2 flex items-center justify-between">
+<span class="text-base font-bold text-primary">Rp 450rb</span>
+</div>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="group relative flex flex-col overflow-hidden rounded-xl bg-white dark:bg-surface-dark shadow-sm border border-gray-100 dark:border-gray-800 transition-all hover:shadow-md">
+<div class="aspect-[3/4] w-full overflow-hidden bg-gray-100 relative">
+<img alt="Vintage Sweater" class="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105" data-alt="Sweater rajut vintage warna coklat" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDN-Mrh868huT_-TcZW62nPzDK0DuY9_yQoV40vqcK5HkS0n8bxPTBMtF_8aIhZCNeQ1sVzBmqbNsa1Z7B-iL_S7itGeENthd4CuoHxw9Lce4d9wMGb-N0PJHPo8JA7rJSUXJG3EEzzZ7_8VDwxsfV2m1ibin3Nr8lBNXltprxbSHKHeu0tHpFlf93Pwhypg75MCoQ-znUCqDdeWr6O661ntruFX9w8l0JhiGbWXk9wNgMFjEMiGWDR1-eC8-8OOl82PA7shcau1FU"/>
+<div class="absolute top-2 right-2 rounded-full bg-white/80 p-1.5 backdrop-blur-sm shadow-sm cursor-pointer hover:bg-white text-gray-600 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined block" style="font-size: 18px;">favorite</span>
+</div>
+<div class="absolute bottom-2 left-2 rounded-md bg-black/60 px-2 py-1 backdrop-blur-sm">
+<span class="text-xs font-bold text-white uppercase">Size S</span>
+</div>
+</div>
+<div class="flex flex-col p-3">
+<p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Polo Ralph Lauren</p>
+<h4 class="text-sm font-bold text-[#111814] dark:text-white line-clamp-1">Cable Knit Sweater</h4>
+<div class="mt-2 flex items-center justify-between">
+<span class="text-base font-bold text-primary">Rp 320rb</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Apply Button -->
+<div class="fixed bottom-0 left-0 w-full p-4 bg-gradient-to-t from-background-light dark:from-background-dark via-background-light/90 dark:via-background-dark/90 to-transparent z-40 max-w-md mx-auto left-0 right-0">
+<button class="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-black font-bold text-base shadow-lg shadow-primary/30 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                Terapkan Filter (4)
+            </button>
+</div>
+</div>
+</body></html>

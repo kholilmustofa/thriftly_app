@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Thrift App Onboarding - Variant 3</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#19e680",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#112119",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Modern vibrant gradient background */
+        .bg-gradient-vibrant {
+            background: radial-gradient(circle at 50% 0%, #ffffff 0%, #eefcf5 100%);
+        }
+        .dark .bg-gradient-vibrant {
+            background: radial-gradient(circle at 50% 0%, #1a2e24 0%, #112119 100%);
+        }
+        
+        /* Soft blobs for background depth */
+        .blob {
+            position: absolute;
+            filter: blur(60px);
+            z-index: 0;
+            border-radius: 50%;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark text-[#111814] dark:text-white antialiased overflow-hidden selection:bg-primary selection:text-black">
+<div class="relative flex h-full min-h-screen w-full flex-col justify-between bg-gradient-vibrant overflow-hidden">
+<!-- Background Decorations -->
+<div class="blob w-96 h-96 bg-primary/20 -top-20 -right-20 animate-pulse"></div>
+<div class="blob w-80 h-80 bg-blue-400/10 bottom-20 -left-20"></div>
+<div class="blob w-64 h-64 bg-primary/10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+<!-- Top Navigation -->
+<nav class="relative z-20 flex w-full justify-end px-6 py-4 pt-14">
+<button class="group flex items-center justify-center rounded-full bg-white/50 dark:bg-black/20 backdrop-blur-md px-5 py-2 text-sm font-bold text-[#111814] dark:text-white transition-all hover:bg-white/80 dark:hover:bg-black/40 ring-1 ring-black/5 dark:ring-white/10">
+<span class="mr-1">Skip</span>
+<span class="material-symbols-outlined text-sm font-bold transition-transform group-hover:translate-x-0.5">chevron_right</span>
+</button>
+</nav>
+<!-- Main Carousel Area -->
+<main class="relative z-10 flex flex-1 flex-col items-center justify-center px-6">
+<!-- Hero Image Stack -->
+<div class="relative mb-8 w-full max-w-[340px] aspect-[3/4]">
+<!-- Background decorative cards representing stack -->
+<div class="absolute top-4 -right-4 h-full w-full rotate-6 rounded-3xl bg-white/60 dark:bg-white/5 border border-white/20 dark:border-white/5 backdrop-blur-sm shadow-sm z-0"></div>
+<div class="absolute top-8 -right-8 h-full w-full rotate-12 rounded-3xl bg-primary/20 border border-primary/10 backdrop-blur-sm z-[-1]"></div>
+<!-- Main Active Slide Image -->
+<div class="relative h-full w-full overflow-hidden rounded-3xl shadow-2xl shadow-black/10 dark:shadow-black/50 z-10 bg-gray-100 dark:bg-gray-800 border-4 border-white dark:border-[#2a3832]">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 hover:scale-105" data-alt="Young woman in trendy thrifted denim jacket posing outdoors" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDU2foeGb9iugQyLn1k6ThD6XeI-pg1pdqliTwq4Gzj7oYQRgw9gxOsHK4INVYNvZ71ReHjvHG1QiuSCunYNwNUbUcZQqHO2JcjF3jgvol2wPah1HK80Nx07TauannMDSJippgPEZ1JAt_Fzba7bAwpUb-IvUOVQQ2owEEWO_8kp8cVd_r3UUPZXHPHvTG6ZLaK5wufCc3kmGhG8yF0gX9pyNNx6ZrL1sfbJ5V7uJM4ZkSwsheGAFtKAApkxlTTuYwAhAdR4V9k0jQ');">
+</div>
+<!-- Overlay Gradient -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+<!-- Floating Tag inside image -->
+<div class="absolute top-4 left-4">
+<div class="flex items-center gap-1 rounded-full bg-white/90 dark:bg-black/80 backdrop-blur-md px-3 py-1.5 shadow-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">verified</span>
+<span class="text-xs font-bold text-black dark:text-white">Authentic Vintage</span>
+</div>
+</div>
+</div>
+<!-- Floating Element (Icon) -->
+<div class="absolute -bottom-6 -left-6 z-20 animate-float">
+<div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white dark:bg-[#1e332a] shadow-lg ring-1 ring-black/5 dark:ring-white/10">
+<span class="material-symbols-outlined text-3xl text-primary">checkroom</span>
+</div>
+</div>
+</div>
+<!-- Text Content -->
+<div class="mt-4 flex w-full flex-col items-center text-center max-w-xs sm:max-w-md">
+<h1 class="mb-3 text-3xl font-extrabold tracking-tight text-[#111814] dark:text-white sm:text-4xl leading-tight">
+                    Find Rare <span class="relative inline-block text-primary">
+                        Gems
+                        <svg class="absolute -bottom-1 left-0 w-full h-2 text-primary/30" preserveaspectratio="none" viewbox="0 0 100 10">
+<path d="M0 5 Q 50 10 100 5" fill="none" stroke="currentColor" stroke-width="3"></path>
+</svg>
+</span>
+</h1>
+<p class="text-base font-medium text-gray-500 dark:text-gray-400 leading-relaxed">
+                    Discover one-of-a-kind vintage pieces, give clothes a second life, and earn cash.
+                </p>
+</div>
+</main>
+<!-- Bottom Actions -->
+<footer class="relative z-20 flex w-full flex-col items-center gap-8 px-6 pb-10 pt-2">
+<!-- Indicators -->
+<div class="flex items-center gap-2">
+<div class="h-2 w-8 rounded-full bg-primary shadow-[0_0_10px_rgba(25,230,128,0.5)]"></div>
+<div class="h-2 w-2 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+<div class="h-2 w-2 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+</div>
+<!-- Primary Action -->
+<div class="w-full max-w-sm">
+<button class="group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-xl bg-primary px-6 py-4 text-base font-bold text-[#112119] shadow-lg shadow-primary/25 transition-all hover:shadow-primary/40 active:scale-[0.98]">
+<span class="relative z-10">Get Started</span>
+<span class="material-symbols-outlined relative z-10 transition-transform group-hover:translate-x-1">arrow_forward</span>
+<!-- Shine Effect -->
+<div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-1000 group-hover:translate-x-full"></div>
+</button>
+<p class="mt-4 text-center text-xs font-semibold text-gray-400 dark:text-gray-500">
+                    Already have an account? <a class="text-[#111814] dark:text-white underline decoration-primary/50 underline-offset-2 hover:decoration-primary" href="#">Log in</a>
+</p>
+</div>
+<!-- Home Indicator Spacer -->
+<div class="h-1 w-full"></div>
+</footer>
+</div>
+</body></html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Thrift Shop Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#19e680",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#112119",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-[#111814] dark:text-white font-display">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-x-hidden max-w-md mx-auto shadow-sm dark:shadow-none bg-white dark:bg-background-dark">
+<!-- Header / Navigation -->
+<div class="flex items-center p-4 pb-2 justify-between sticky top-0 bg-white/90 dark:bg-background-dark/90 backdrop-blur-md z-10">
+<button class="text-[#111814] dark:text-white flex size-12 shrink-0 items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h2 class="text-[#111814] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Masuk</h2>
+</div>
+<!-- Hero Image -->
+<div class="w-full px-4 pt-4 pb-2">
+<div class="w-full aspect-[2/1] bg-center bg-no-repeat bg-cover flex flex-col justify-end overflow-hidden rounded-xl relative" data-alt="Modern thrift clothes rack illustration" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCiRepfqGpqa6nukTtYLEkffIDE3mUYE3JSMKGO5G2PsdVLIE2mm4SQfwAf_5CKBa0zJbGZioPQ4X30IBJuGgyIOcVx8DMsa3xvb3kH3cg8ineMz7cCP4s8qf_qSOqgC0kKxYiFGf9SCw7dpAptskMB3eWHI_VbBckmAuqm8PS7GPp9R-yW8Nqpkh2t7Fn9yKPxzvfaX4SCwF4g_lTjK-fV9tBAVQdPMiBn5x_9vTzq1kaKk9UL_sNk_jnd5ybC7kdGh6gYR8a9bsI");'>
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+</div>
+</div>
+<!-- Headline & Welcome Text -->
+<div class="px-4 pt-6 pb-2">
+<h1 class="text-[#111814] dark:text-white tracking-tight text-[32px] font-bold leading-tight text-left">Selamat Datang Kembali!</h1>
+<p class="text-[#638875] dark:text-gray-400 text-base font-normal leading-normal pt-2">Temukan gaya thrift terbaikmu hari ini.</p>
+</div>
+<!-- Login Form -->
+<form class="flex flex-col px-4 py-4 gap-5" onsubmit="event.preventDefault();">
+<!-- Email Input -->
+<div class="flex flex-col gap-2">
+<label class="text-[#111814] dark:text-white text-base font-semibold leading-normal" for="email">Email / Username</label>
+<div class="relative">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111814] dark:text-white placeholder:text-[#638875] dark:placeholder:text-gray-500 focus:outline-0 focus:ring-2 focus:ring-primary/50 focus:border-primary border border-[#dce5e0] dark:border-gray-700 bg-white dark:bg-white/5 h-14 p-[15px] text-base font-normal leading-normal transition-all" id="email" placeholder="masukan email kamu..." type="email" value=""/>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-[#638875]">mail</span>
+</div>
+</div>
+<!-- Password Input -->
+<div class="flex flex-col gap-2">
+<label class="text-[#111814] dark:text-white text-base font-semibold leading-normal" for="password">Password</label>
+<div class="relative">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111814] dark:text-white placeholder:text-[#638875] dark:placeholder:text-gray-500 focus:outline-0 focus:ring-2 focus:ring-primary/50 focus:border-primary border border-[#dce5e0] dark:border-gray-700 bg-white dark:bg-white/5 h-14 p-[15px] text-base font-normal leading-normal transition-all pr-12" id="password" placeholder="••••••••" type="password" value=""/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-[#638875] dark:text-gray-400 hover:text-primary transition-colors flex items-center justify-center" type="button">
+<span class="material-symbols-outlined">visibility_off</span>
+</button>
+</div>
+<div class="flex justify-end mt-1">
+<a class="text-sm font-medium text-[#111814] dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="#">Lupa Password?</a>
+</div>
+</div>
+<!-- Login Button -->
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 px-5 bg-primary hover:bg-primary/90 text-[#112119] text-base font-bold leading-normal tracking-[0.015em] transition-all active:scale-[0.98] shadow-sm shadow-primary/30 mt-2">
+<span class="truncate">Masuk</span>
+</button>
+</form>
+<!-- Social Login Separator -->
+<div class="relative px-4 py-2">
+<div aria-hidden="true" class="absolute inset-0 flex items-center px-4">
+<div class="w-full border-t border-gray-200 dark:border-gray-700"></div>
+</div>
+<div class="relative flex justify-center">
+<span class="bg-white dark:bg-background-dark px-3 text-sm text-gray-500">atau masuk dengan</span>
+</div>
+</div>
+<!-- Social Buttons -->
+<div class="flex justify-center gap-4 px-4 py-4">
+<button class="flex items-center justify-center size-14 rounded-full border border-[#dce5e0] dark:border-gray-700 bg-white dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 transition-colors">
+<img alt="Google" class="size-6" data-alt="Google logo icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFODVTFixO-DUMcmlLNXxcBg9DmHpEX1Lo06f7MM5rVSp-h5jAVJ-t5BC3_AanhZeQY5tnEwXa14iemDyMAK11TT2VmGux3NjTejZZC0XjkVjFBcNKRbyV06LyxSVjcd-RzRuPRO1sTOTlfMH9zDG1yTFL8lAYnJW-fFYmrXLKNSQK5M90nf4pGKNc3yko9nUtUoFZy8nn8mUzJsoy2yCiNb6OYI-G05gsDD2oowfsXWx--neyUWfaosliV1uq9pitplTAcjhKAvg"/>
+</button>
+<button class="flex items-center justify-center size-14 rounded-full border border-[#dce5e0] dark:border-gray-700 bg-white dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 transition-colors">
+<img alt="Apple" class="size-6 dark:invert" data-alt="Apple logo icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGBrpSKwxFM9iF1DK2l6lN_oyayAe_qFmTFxDLK2TtSe6jMyg3aNiiD3ZC0zRGNAjF8tUsxROIJ1Qvbz18ZML_A0K4iuWCYmhvE9fyTAt4vlI2aOnjRax9dOEdZnlPuqNnVPNC1kH0S6fMjhmty_WxaR22pd9p-TmZ0BaSFsdsnPolNJs502rcnY5OeKXGxPbYSiC09IO2G5nhViGryM8rjUHmMvHJESzadSBfXCghvJhk5CI0-G2ZPPX9c99sNEnEbEI04QB_egM"/>
+</button>
+</div>
+<!-- Spacer to push footer down if needed -->
+<div class="flex-1 min-h-[20px]"></div>
+<!-- Footer / Sign Up Link -->
+<div class="p-4 pb-8 text-center">
+<p class="text-[#638875] dark:text-gray-400 text-base font-normal leading-normal">
+                Belum punya akun? 
+                <a class="text-[#111814] dark:text-white font-bold hover:underline decoration-primary decoration-2 underline-offset-4" href="#">Daftar Sekarang</a>
+</p>
+</div>
+</div>
+</body></html>

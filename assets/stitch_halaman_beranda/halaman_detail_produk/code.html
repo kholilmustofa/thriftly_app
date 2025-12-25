@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Detail Produk - Thrift App</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#19e680",
+                        "primary-dark": "#12c56b",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#112119",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c24",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#111814] dark:text-white antialiased">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-x-hidden pb-24 max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-xl">
+<!-- Header Sticky -->
+<div class="sticky top-0 z-50 flex items-center bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-md p-4 justify-between border-b border-gray-100 dark:border-gray-800 transition-colors">
+<button class="text-[#111814] dark:text-white flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<div class="flex items-center justify-end gap-2">
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-[#111814] dark:text-white text-[24px]">share</span>
+</button>
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-[#111814] dark:text-white text-[24px]">favorite</span>
+</button>
+</div>
+</div>
+<!-- Image Gallery Carousel -->
+<div class="relative w-full aspect-[4/5] bg-gray-100 dark:bg-gray-800">
+<div class="flex w-full h-full overflow-x-auto snap-x snap-mandatory hide-scrollbar">
+<!-- Image 1 -->
+<div class="w-full h-full shrink-0 snap-center bg-center bg-cover bg-no-repeat" data-alt="Vintage green windbreaker jacket front view" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBvfc-0Y4iLh3nYa4PCNCBNT7mUEC5VFmYWHGoiGB5R9tqOVZoMVZ4242LtZ3OQdjVLL1cvXo6hOOYaDHrvEhAWK0TGET-fXVF-iBAPtRk9JdQLDUuqAJJCnzlp5URm_lj5GK4CeUA1DeO7RIbe45IcA_ovONiCsj_FUhnGQsq-2NlJE1cx9O2bnc279dWc0sbjk0G4ps8pDVEB2yF3nLOaBnbztZAq_OjXYljTTJ0VpFfsn-qPF6Nu7e3IAj2bCv2brY3lcfg9vBg");'>
+</div>
+<!-- Image 2 -->
+<div class="w-full h-full shrink-0 snap-center bg-center bg-cover bg-no-repeat" data-alt="Close up of fabric texture on vintage jacket" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBJ8Fznmtrf71dKiKpiprZvwi0sO_sPKxxmwO2BFOULQZuCGOQejueFs53FSxmWjdePA_lMPMsuh8_w_E7F4Jj_cF-KKSvCG2Vcpt0rebAGp_bDg7dA4Aeld_WOla5uj7McyJTQJZse6vgcckPMeTTCI3o4SqJY1-0EAjHpYvJNG4HAsCiHrPGewHfXNunuEdjnFiTiRsyiS-0WRgRnLDn9Ez3PcVE_YJftOyvu-3j9pLV8z5mAT45JDnMQf7OdSA-nf1pCNudjMkc");'>
+</div>
+<!-- Image 3 -->
+<div class="w-full h-full shrink-0 snap-center bg-center bg-cover bg-no-repeat" data-alt="Back view of the vintage windbreaker jacket" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAraq3KLthO85BAONbdLyAGTNvvG35g4kl7lHnr7zpeb2mQyfaXjR0ohTJTBOxOjhhwFzd1BQNN_WgScm9RAhF7MBzRNiRc-WnfDJ4jyxKFtvSCJ7gPLYOAH6EiLboTH6hxtnzzXB8hsjnrCJL2OmX1uoJILWevSb2fVOl4su-4_cKYkvY1QhEWzYgzmvH6gMLjg9nhWRcKhgqOE62FV-apNhVlOl0IG6o6oouEfhrHEhg8JaBGyoq8naB2fzAOIxOB9R0air_j5nw");'>
+</div>
+</div>
+<!-- Pagination Dots -->
+<div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 p-1.5 rounded-full bg-black/20 backdrop-blur-sm">
+<div class="w-2 h-2 rounded-full bg-white"></div>
+<div class="w-2 h-2 rounded-full bg-white/50"></div>
+<div class="w-2 h-2 rounded-full bg-white/50"></div>
+</div>
+<!-- Thrift Badge -->
+<div class="absolute top-4 left-4 bg-primary text-black text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">
+                THRIFT FIND
+            </div>
+</div>
+<!-- Product Title & Price -->
+<div class="flex flex-col px-4 pt-6 pb-2">
+<div class="flex justify-between items-start gap-4">
+<h1 class="text-[#111814] dark:text-white text-2xl font-bold leading-tight tracking-tight flex-1">
+                    Vintage 90s Nike Windbreaker Teal/Purple
+                </h1>
+<div class="flex flex-col items-end">
+<span class="text-primary text-xl font-bold tracking-tight">Rp 150.000</span>
+<span class="text-xs text-gray-500 dark:text-gray-400 line-through">Rp 250.000</span>
+</div>
+</div>
+<div class="text-gray-500 dark:text-gray-400 text-sm mt-1">
+                Diposting 2 jam yang lalu
+            </div>
+</div>
+<!-- Tags/Chips -->
+<div class="flex gap-2 p-4 flex-wrap">
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#f0f4f2] dark:bg-white/10 px-3 transition-colors">
+<span class="material-symbols-outlined text-[#111814] dark:text-white text-[18px]">straighten</span>
+<p class="text-[#111814] dark:text-white text-sm font-medium">Size: L</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#f0f4f2] dark:bg-white/10 px-3 transition-colors">
+<span class="material-symbols-outlined text-[#111814] dark:text-white text-[18px]">verified</span>
+<p class="text-[#111814] dark:text-white text-sm font-medium">Kondisi: 9/10</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#f0f4f2] dark:bg-white/10 px-3 transition-colors">
+<p class="text-[#111814] dark:text-white text-sm font-medium">Original</p>
+</div>
+</div>
+<!-- Divider -->
+<div class="h-px w-full bg-gray-100 dark:bg-gray-800 my-2"></div>
+<!-- Seller Profile -->
+<div class="px-4 py-3">
+<div class="flex items-center justify-between rounded-xl p-3 bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 shadow-sm">
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="w-12 h-12 rounded-full bg-gray-200 bg-center bg-cover" data-alt="Seller profile picture showing a smiling person" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCLmtOn_P8Kst8_jwpeKgWA2ur48kZjHBvIaVHHmipNLk631yxsYZKgG7ep_wo3Sb2qZQUI0N0jWL52-FuQ0LVhdlSz7gKZHxb345fFTmTjkVkfLAk0yvx6pcZScP8JrgmqjOaxvVN46F-xW2t1Dt8YyWYxzwM6Kq3paZ7VOIHSTKq86SMpMY8ugPkAZVKh-nwaCcXi3SFyrBkhboCf62GcHXEL3YEM2gJA4FgaagZHOutwed2XwmeIlgnDsReNxTKUKtMGbui6fSQ");'>
+</div>
+<div class="absolute -bottom-1 -right-1 bg-primary text-black text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-white dark:border-surface-dark">
+                            4.9
+                        </div>
+</div>
+<div class="flex flex-col">
+<h3 class="font-bold text-[#111814] dark:text-white text-sm">ThriftHunterJkt</h3>
+<div class="flex items-center gap-1 text-gray-500 dark:text-gray-400 text-xs">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+<span>Jakarta Selatan</span>
+</div>
+</div>
+</div>
+<button class="text-sm font-bold text-primary hover:text-primary-dark transition-colors px-3 py-2 rounded-lg hover:bg-primary/5">
+                    Lihat Profil
+                </button>
+</div>
+</div>
+<!-- Divider -->
+<div class="h-2 w-full bg-gray-50 dark:bg-black/20"></div>
+<!-- Description -->
+<div class="flex flex-col px-4 py-6 gap-3">
+<h2 class="text-[#111814] dark:text-white text-lg font-bold">Deskripsi Produk</h2>
+<div class="text-[#111814]/80 dark:text-white/80 text-base leading-relaxed font-body space-y-4">
+<p>Jaket Windbreaker Nike Vintage original era 90an. Warna masih pekat, karet-karet aman tidak ada yang longgar. Cocok buat sunmori atau daily outfit.</p>
+<ul class="list-disc pl-5 space-y-1 text-sm text-gray-600 dark:text-gray-300">
+<li>Panjang: 72cm</li>
+<li>Lebar Dada: 58cm</li>
+<li>Material: Nylon/Polyester</li>
+<li>Tag: Masih lengkap</li>
+</ul>
+<div class="p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800/30 rounded-lg flex gap-3 items-start">
+<span class="material-symbols-outlined text-amber-600 dark:text-amber-500 shrink-0 mt-0.5">info</span>
+<div>
+<p class="text-sm font-bold text-amber-800 dark:text-amber-500">Info Minus</p>
+<p class="text-xs text-amber-700 dark:text-amber-400 mt-1">Ada noda samar di bagian lengan kiri belakang (lihat foto terakhir). Bisa hilang kalau dicuci laundry.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Safe Area Spacer for Bottom Bar -->
+<div class="h-10"></div>
+</div>
+<!-- Sticky Bottom Action Bar -->
+<div class="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-surface-dark border-t border-gray-100 dark:border-gray-800 px-4 py-3 pb-8 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+<div class="max-w-md mx-auto flex items-center gap-3">
+<button class="flex-1 flex h-12 items-center justify-center gap-2 rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-transparent text-[#111814] dark:text-white font-bold hover:bg-gray-50 dark:hover:bg-white/5 transition-all active:scale-95">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+                Chat
+            </button>
+<button class="flex-[2] flex h-12 items-center justify-center gap-2 rounded-xl bg-primary text-[#111814] font-bold shadow-lg shadow-primary/20 hover:bg-primary-dark transition-all active:scale-95">
+<span class="material-symbols-outlined text-[20px]">shopping_cart</span>
+                + Keranjang
+            </button>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Keranjang Belanja - Thrift App</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#19e680",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#112119",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1c3026",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar hide for cleaner mobile look */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-900 dark:text-white antialiased selection:bg-primary/30">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-x-hidden pb-32">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-40 bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-md border-b border-gray-100 dark:border-white/5">
+<div class="flex items-center p-4 justify-between h-16">
+<button class="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-colors text-gray-900 dark:text-white">
+<span class="material-symbols-outlined text-[24px]">arrow_back_ios_new</span>
+</button>
+<h2 class="text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-10 text-gray-900 dark:text-white">Keranjang Belanja</h2>
+</div>
+</header>
+<!-- Product List -->
+<main class="flex flex-col gap-4 p-4">
+<!-- Item 1 -->
+<div class="flex flex-col gap-3 bg-surface-light dark:bg-surface-dark p-4 rounded-xl shadow-sm border border-gray-100 dark:border-white/5">
+<div class="flex items-start justify-between gap-4">
+<div class="flex gap-4">
+<div class="relative shrink-0">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-20 sm:size-24 bg-gray-100 dark:bg-gray-800" data-alt="Retro colorful vintage windbreaker jacket on hanger" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC92afrkc6pZEahh1JF53CAvhym7a99oOw3davgFR_3r8500157hMQt3sCS9c7ATVLv77_sYJhnCNbIYufkTfe885bNvACt_EHnwFZixYVR50FcjuasfU6i2c3Ky1JdvuAQK9ySgG7mPfr2Me4n2HNI5cIsYmznjyxOHidf5Ih7JHKILaZJ2X11NMs4iIWNBILkl7QHWJsZolwsV8y5ObB_WKIEmsehjVkJ8yxYGzjAtvWCgPujfzC_0jRdmQlP0sG5I3Qc_OW654M");'>
+</div>
+</div>
+<div class="flex flex-col justify-start py-1">
+<p class="text-gray-900 dark:text-white text-base font-semibold leading-tight line-clamp-2">Vintage Nike Windbreaker</p>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-medium mt-1">Size L • Condition 9/10</p>
+<p class="text-primary font-bold text-base mt-2">Rp 350.000</p>
+</div>
+</div>
+<button class="text-gray-400 hover:text-red-500 transition-colors p-1 -mr-2">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+<!-- Divider -->
+<div class="h-px w-full bg-gray-100 dark:bg-white/10"></div>
+<!-- Actions -->
+<div class="flex justify-between items-center">
+<span class="text-xs font-medium text-gray-400 uppercase tracking-wider">Quantity</span>
+<div class="flex items-center gap-3 bg-background-light dark:bg-background-dark rounded-full p-1 border border-gray-100 dark:border-white/5">
+<button class="flex size-7 items-center justify-center rounded-full bg-surface-light dark:bg-surface-dark shadow-sm text-gray-600 dark:text-gray-300 hover:text-primary transition-colors disabled:opacity-50">
+<span class="material-symbols-outlined text-[16px]">remove</span>
+</button>
+<input class="w-8 p-0 text-center bg-transparent text-sm font-semibold text-gray-900 dark:text-white border-none focus:ring-0" readonly="" type="number" value="1"/>
+<button class="flex size-7 items-center justify-center rounded-full bg-surface-light dark:bg-surface-dark shadow-sm text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex flex-col gap-3 bg-surface-light dark:bg-surface-dark p-4 rounded-xl shadow-sm border border-gray-100 dark:border-white/5">
+<div class="flex items-start justify-between gap-4">
+<div class="flex gap-4">
+<div class="relative shrink-0">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-20 sm:size-24 bg-gray-100 dark:bg-gray-800" data-alt="Red plaid flannel shirt folded neatly" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuByDy628aAXpUoJ2U13el3GeFlNVQum3G2szmf7HCBLIrr43VRV2CXXWQyOzWqGTfDK_AgeRwquGEDb_vkbwwh73oIWRHBYBj0MfvT2QrJ-9sv_YIoXu-iivDqhVNxq3mndm1SPzQIpTN0NBNzZtN37T2pe5kSI4R0hVD2YRYs1bdwHVnYWq0AZ3WF2wnOnSTnF3SR0D66B17ObQZ14T_EyXbMcyHlqydZW114XIt0ZbZ3WYJGlwmLA0ghDQBoy9PjBR8FK-Y2QR98");'>
+</div>
+</div>
+<div class="flex flex-col justify-start py-1">
+<p class="text-gray-900 dark:text-white text-base font-semibold leading-tight line-clamp-2">Kemeja Flanel Uniqlo 90s</p>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-medium mt-1">Size M • Rare Item</p>
+<p class="text-primary font-bold text-base mt-2">Rp 125.000</p>
+</div>
+</div>
+<button class="text-gray-400 hover:text-red-500 transition-colors p-1 -mr-2">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+<div class="h-px w-full bg-gray-100 dark:bg-white/10"></div>
+<div class="flex justify-between items-center">
+<span class="text-xs font-medium text-gray-400 uppercase tracking-wider">Quantity</span>
+<div class="flex items-center gap-3 bg-background-light dark:bg-background-dark rounded-full p-1 border border-gray-100 dark:border-white/5">
+<button class="flex size-7 items-center justify-center rounded-full bg-surface-light dark:bg-surface-dark shadow-sm text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[16px]">remove</span>
+</button>
+<input class="w-8 p-0 text-center bg-transparent text-sm font-semibold text-gray-900 dark:text-white border-none focus:ring-0" readonly="" type="number" value="1"/>
+<button class="flex size-7 items-center justify-center rounded-full bg-surface-light dark:bg-surface-dark shadow-sm text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="flex flex-col gap-3 bg-surface-light dark:bg-surface-dark p-4 rounded-xl shadow-sm border border-gray-100 dark:border-white/5">
+<div class="flex items-start justify-between gap-4">
+<div class="flex gap-4">
+<div class="relative shrink-0">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-20 sm:size-24 bg-gray-100 dark:bg-gray-800" data-alt="Blue denim jeans texture close up" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBkETBOSkUypPTULhSTj3wBZZUauH_TRtZIUASuHH-nw4HOlLv5fBFE6LTCztQgQ20InrlNcVNaXsH4YaccwDHdtQ1Z7HZzxtpHaD-JEI-5oSaDnuLO6Zct2kDPMp-MoZsK01kQuhRvhGUTmaO3doaDi5O3QuC0Dy6Z2GmtQjfXFrdovkYz4iUGIckhAXEH_KT6rZADWNVIQx9Tf-mmdAJH_zgt-VAMFAY1ffRsBfISbyJgoimVI3jRTwEIO9qSVFth7N7LdpIeTIE");'>
+</div>
+</div>
+<div class="flex flex-col justify-start py-1">
+<p class="text-gray-900 dark:text-white text-base font-semibold leading-tight line-clamp-2">Levi's 501 Jeans</p>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-medium mt-1">Size 32 • Original Wash</p>
+<p class="text-primary font-bold text-base mt-2">Rp 450.000</p>
+</div>
+</div>
+<button class="text-gray-400 hover:text-red-500 transition-colors p-1 -mr-2">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+<div class="h-px w-full bg-gray-100 dark:bg-white/10"></div>
+<div class="flex justify-between items-center">
+<span class="text-xs font-medium text-gray-400 uppercase tracking-wider">Quantity</span>
+<div class="flex items-center gap-3 bg-background-light dark:bg-background-dark rounded-full p-1 border border-gray-100 dark:border-white/5">
+<button class="flex size-7 items-center justify-center rounded-full bg-surface-light dark:bg-surface-dark shadow-sm text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[16px]">remove</span>
+</button>
+<input class="w-8 p-0 text-center bg-transparent text-sm font-semibold text-gray-900 dark:text-white border-none focus:ring-0" readonly="" type="number" value="1"/>
+<button class="flex size-7 items-center justify-center rounded-full bg-surface-light dark:bg-surface-dark shadow-sm text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- DescriptionList / Order Summary -->
+<div class="mt-2 bg-surface-light dark:bg-surface-dark p-5 rounded-xl border border-gray-100 dark:border-white/5">
+<h3 class="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4">Rincian Pembayaran</h3>
+<div class="flex flex-col gap-3">
+<div class="flex justify-between items-center">
+<p class="text-gray-600 dark:text-gray-300 text-sm font-medium">Subtotal (3 Items)</p>
+<p class="text-gray-900 dark:text-white text-sm font-semibold">Rp 925.000</p>
+</div>
+<div class="flex justify-between items-center">
+<p class="text-gray-600 dark:text-gray-300 text-sm font-medium">Estimasi Pengiriman</p>
+<p class="text-gray-900 dark:text-white text-sm font-semibold">Rp 20.000</p>
+</div>
+<div class="flex justify-between items-center">
+<p class="text-gray-600 dark:text-gray-300 text-sm font-medium">Biaya Layanan</p>
+<p class="text-gray-900 dark:text-white text-sm font-semibold">Rp 1.000</p>
+</div>
+<div class="my-1 h-px w-full bg-dashed border-t border-dashed border-gray-300 dark:border-gray-600"></div>
+<div class="flex justify-between items-center">
+<p class="text-gray-900 dark:text-white text-base font-bold">Total Tagihan</p>
+<p class="text-primary text-lg font-bold">Rp 946.000</p>
+</div>
+</div>
+</div>
+<!-- Promo Code Input (Extra modern touch) -->
+<div class="bg-surface-light dark:bg-surface-dark p-4 rounded-xl border border-gray-100 dark:border-white/5 flex gap-3 items-center">
+<span class="material-symbols-outlined text-primary">sell</span>
+<input class="bg-transparent border-none p-0 text-sm text-gray-900 dark:text-white placeholder-gray-400 flex-1 focus:ring-0" placeholder="Punya kode promo?" type="text"/>
+<button class="text-primary text-sm font-bold hover:opacity-80">Pakai</button>
+</div>
+</main>
+<!-- Sticky Footer -->
+<div class="fixed bottom-0 w-full z-50 bg-surface-light dark:bg-surface-dark border-t border-gray-100 dark:border-white/5 px-4 pt-4 pb-8 sm:pb-6 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+<div class="flex flex-row items-center gap-4 max-w-lg mx-auto">
+<div class="flex flex-col flex-1">
+<span class="text-xs text-gray-500 dark:text-gray-400">Total Pembayaran</span>
+<span class="text-lg font-bold text-gray-900 dark:text-white">Rp 946.000</span>
+</div>
+<button class="flex-1 bg-primary hover:bg-primary/90 text-background-dark font-bold text-sm py-3 px-6 rounded-full shadow-lg shadow-primary/20 flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+<span>Lanjutkan</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</body></html>

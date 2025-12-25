@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Jual Barang - Thrift App</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#19e680",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#112119",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1c3026",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar hiding for horizontal scroll areas */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#111814] dark:text-white transition-colors duration-200">
+<div class="relative flex h-auto min-h-screen w-full max-w-md mx-auto flex-col group/design-root overflow-x-hidden bg-background-light dark:bg-background-dark shadow-2xl">
+<!-- Top App Bar -->
+<div class="sticky top-0 z-50 flex items-center bg-surface-light dark:bg-surface-dark p-4 pb-2 border-b border-[#e5e7eb] dark:border-[#2a4034] justify-between backdrop-blur-md bg-opacity-95 dark:bg-opacity-95">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-white/10 cursor-pointer">
+<span class="material-symbols-outlined text-[#111814] dark:text-white" style="font-size: 24px;">close</span>
+</div>
+<h2 class="text-[#111814] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Jual Barang</h2>
+<button class="flex items-center justify-end px-2 disabled:opacity-50">
+<p class="text-primary text-base font-bold leading-normal tracking-[0.015em] shrink-0">Simpan</p>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto pb-24">
+<!-- Photo Upload Section -->
+<div class="bg-surface-light dark:bg-surface-dark mt-2 py-5 px-4">
+<div class="flex items-center justify-between mb-3">
+<h3 class="text-[#111814] dark:text-white tracking-tight text-lg font-bold leading-tight">Foto Produk</h3>
+<span class="text-sm text-gray-500 dark:text-gray-400 font-medium">0/5</span>
+</div>
+<div class="flex gap-3 overflow-x-auto no-scrollbar pb-2">
+<!-- Add Photo Button -->
+<div class="shrink-0 relative flex flex-col items-center justify-center w-[120px] h-[120px] rounded-xl border-2 border-dashed border-primary/50 bg-primary/5 dark:bg-primary/10 cursor-pointer active:scale-95 transition-transform">
+<div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mb-2">
+<span class="material-symbols-outlined text-primary">add_a_photo</span>
+</div>
+<p class="text-primary text-xs font-bold">Tambah Foto</p>
+</div>
+<!-- Placeholder Images (Simulated Uploaded) -->
+<!-- In a real app, these would appear after upload -->
+<div class="shrink-0 relative w-[120px] h-[120px] rounded-xl overflow-hidden group">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Vintage denim jacket folded neatly" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBw37YFWSfHRVSdKoCcwm1U_5nvWYcZIlhKhQP9rHWP3ERzLIK4hW6LXswaaTLPfvu1E3KKPvuBdEX9Pk_vHj6luJhmAfnzdNWzqcTPJm2koriIjg2aWy1BmYbDyBrsz4DQpmLeeE1jrUG5lBTUeEZ0Cty_axDXZVPJ3grbVfAp3e9vvzbwNEUHeO0Izu7l4JLHzjto7bOVpwrKJWE0hdeLvDtU8hjM6FcPQcMEiEM2XyYw0F0uCO6xbh7k4zhKsAqIeQ6nFF5zaKI");'></div>
+<button class="absolute top-1 right-1 bg-black/50 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+<div class="absolute bottom-0 left-0 right-0 bg-black/60 px-2 py-1">
+<p class="text-[10px] text-white font-medium text-center">Cover</p>
+</div>
+</div>
+</div>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Tips: Foto yang cerah dan jelas laku lebih cepat!</p>
+</div>
+<!-- Detail Product Section -->
+<div class="mt-2 bg-surface-light dark:bg-surface-dark p-4 flex flex-col gap-6">
+<h3 class="text-[#111814] dark:text-white tracking-tight text-lg font-bold leading-tight">Detail Produk</h3>
+<!-- Product Name -->
+<label class="flex flex-col w-full">
+<span class="text-[#111814] dark:text-gray-200 text-sm font-semibold leading-normal pb-2">Nama Produk</span>
+<input class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#112119] focus:bg-white dark:focus:bg-[#1c3026] text-[#111814] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 focus:border-primary h-12 px-4 placeholder:text-gray-400 text-base font-normal transition-all" placeholder="Contoh: Kemeja Flannel Uniqlo Size L" type="text" value=""/>
+</label>
+<!-- Category Selector -->
+<label class="flex flex-col w-full">
+<span class="text-[#111814] dark:text-gray-200 text-sm font-semibold leading-normal pb-2">Kategori</span>
+<button class="w-full flex items-center justify-between rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#112119] hover:bg-gray-100 dark:hover:bg-[#25382e] h-12 px-4 text-left transition-colors">
+<span class="text-gray-400 dark:text-gray-500 text-base">Pilih Kategori</span>
+<span class="material-symbols-outlined text-gray-400">chevron_right</span>
+</button>
+</label>
+<!-- Condition Selector -->
+<div class="flex flex-col w-full">
+<span class="text-[#111814] dark:text-gray-200 text-sm font-semibold leading-normal pb-2">Kondisi Barang</span>
+<div class="grid grid-cols-2 gap-2">
+<!-- Option: Baru -->
+<label class="cursor-pointer relative">
+<input class="peer sr-only" name="condition" type="radio"/>
+<div class="w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#112119] peer-checked:border-primary peer-checked:bg-primary/10 dark:peer-checked:bg-primary/20 peer-checked:text-primary dark:peer-checked:text-primary transition-all flex flex-col items-center text-center gap-1 group">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-primary peer-checked:text-primary text-xl">verified</span>
+<span class="text-sm font-bold text-gray-600 dark:text-gray-300 peer-checked:text-primary">Baru (Tag)</span>
+</div>
+</label>
+<!-- Option: Seperti Baru -->
+<label class="cursor-pointer relative">
+<input checked="" class="peer sr-only" name="condition" type="radio"/>
+<div class="w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#112119] peer-checked:border-primary peer-checked:bg-primary/10 dark:peer-checked:bg-primary/20 peer-checked:text-primary dark:peer-checked:text-primary transition-all flex flex-col items-center text-center gap-1 group">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-primary peer-checked:text-primary text-xl">diamond</span>
+<span class="text-sm font-bold text-gray-600 dark:text-gray-300 peer-checked:text-primary">Like New</span>
+</div>
+</label>
+<!-- Option: Baik -->
+<label class="cursor-pointer relative">
+<input class="peer sr-only" name="condition" type="radio"/>
+<div class="w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#112119] peer-checked:border-primary peer-checked:bg-primary/10 dark:peer-checked:bg-primary/20 peer-checked:text-primary dark:peer-checked:text-primary transition-all flex flex-col items-center text-center gap-1 group">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-primary peer-checked:text-primary text-xl">thumb_up</span>
+<span class="text-sm font-bold text-gray-600 dark:text-gray-300 peer-checked:text-primary">Kondisi Baik</span>
+</div>
+</label>
+<!-- Option: Defect -->
+<label class="cursor-pointer relative">
+<input class="peer sr-only" name="condition" type="radio"/>
+<div class="w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#112119] peer-checked:border-primary peer-checked:bg-primary/10 dark:peer-checked:bg-primary/20 peer-checked:text-primary dark:peer-checked:text-primary transition-all flex flex-col items-center text-center gap-1 group">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-primary peer-checked:text-primary text-xl">recycling</span>
+<span class="text-sm font-bold text-gray-600 dark:text-gray-300 peer-checked:text-primary">Ada Minus</span>
+</div>
+</label>
+</div>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-2 px-1"><span class="font-bold">Like New:</span> Bekas pemakaian wajar, warna masih pekat, tidak ada sobek/noda.</p>
+</div>
+<!-- Description -->
+<label class="flex flex-col w-full relative">
+<span class="text-[#111814] dark:text-gray-200 text-sm font-semibold leading-normal pb-2">Deskripsi</span>
+<textarea class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#112119] focus:bg-white dark:focus:bg-[#1c3026] text-[#111814] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 focus:border-primary min-h-[120px] p-4 placeholder:text-gray-400 text-base font-normal resize-none" placeholder="Jelaskan detail ukuran (P x L), bahan, dan minus barang jika ada..."></textarea>
+<span class="absolute bottom-3 right-3 text-xs text-gray-400">0/2000</span>
+</label>
+<div class="border-t border-gray-100 dark:border-gray-800 my-1"></div>
+<!-- Price Input -->
+<div class="flex flex-col w-full">
+<span class="text-[#111814] dark:text-gray-200 text-sm font-semibold leading-normal pb-2">Harga</span>
+<div class="relative flex items-center">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="text-gray-500 font-bold">Rp</span>
+</div>
+<input class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#112119] focus:bg-white dark:focus:bg-[#1c3026] text-[#111814] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 focus:border-primary h-14 pl-12 pr-4 placeholder:text-gray-400 text-lg font-bold" placeholder="0" type="number"/>
+</div>
+</div>
+</div>
+<div class="h-24"></div> <!-- Spacer for footer -->
+</div>
+<!-- Sticky Footer Action -->
+<div class="absolute bottom-0 left-0 w-full bg-surface-light dark:bg-surface-dark border-t border-gray-100 dark:border-[#2a4034] p-4 pb-6 backdrop-blur-xl bg-opacity-95 dark:bg-opacity-95 z-40">
+<button class="w-full bg-primary hover:bg-primary/90 text-[#112119] h-14 rounded-full font-bold text-lg shadow-lg shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+<span>Terbitkan Sekarang</span>
+</button>
+</div>
+</div>
+</body></html>

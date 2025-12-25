@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Halaman Register</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#19e680",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#112119",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-50 transition-colors duration-200">
+<div class="relative flex min-h-screen w-full flex-col overflow-hidden max-w-md mx-auto bg-white dark:bg-background-dark shadow-xl">
+<!-- TopAppBar -->
+<header class="flex items-center justify-between px-4 py-4 bg-transparent sticky top-0 z-10 backdrop-blur-sm">
+<button class="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-900 dark:text-white text-2xl">arrow_back</span>
+</button>
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-10">
+                Register
+            </h2>
+</header>
+<!-- Main Content -->
+<main class="flex-1 px-5 pb-8 flex flex-col">
+<!-- Headline & Body -->
+<div class="pt-4 pb-6">
+<h1 class="text-slate-900 dark:text-white tracking-tight text-[32px] font-bold leading-[1.2] mb-2">
+                    Buat Akun Baru
+                </h1>
+<p class="text-slate-500 dark:text-slate-400 text-base font-normal leading-relaxed">
+                    Temukan style unikmu hari ini dengan mendaftar di Thrift Wave.
+                </p>
+</div>
+<!-- Form Fields -->
+<form class="flex flex-col gap-5" onsubmit="event.preventDefault()">
+<!-- Nama Lengkap -->
+<div class="flex flex-col gap-2">
+<label class="text-slate-900 dark:text-slate-200 text-sm font-semibold leading-normal">
+                        Nama Lengkap
+                    </label>
+<div class="flex w-full items-stretch rounded-xl overflow-hidden shadow-sm transition-all focus-within:ring-2 focus-within:ring-primary/50">
+<input class="flex-1 w-full min-w-0 h-14 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 border-r-0 rounded-l-xl px-4 text-base text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-slate-200 dark:focus:border-slate-700 focus:ring-0" placeholder="Masukkan nama lengkap" type="text"/>
+<div class="flex items-center justify-center px-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 border-l-0 rounded-r-xl">
+<span class="material-symbols-outlined text-slate-400 dark:text-slate-500">person</span>
+</div>
+</div>
+</div>
+<!-- Email -->
+<div class="flex flex-col gap-2">
+<label class="text-slate-900 dark:text-slate-200 text-sm font-semibold leading-normal">
+                        Email
+                    </label>
+<div class="flex w-full items-stretch rounded-xl overflow-hidden shadow-sm transition-all focus-within:ring-2 focus-within:ring-primary/50">
+<input class="flex-1 w-full min-w-0 h-14 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 border-r-0 rounded-l-xl px-4 text-base text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-slate-200 dark:focus:border-slate-700 focus:ring-0" placeholder="contoh@email.com" type="email"/>
+<div class="flex items-center justify-center px-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 border-l-0 rounded-r-xl">
+<span class="material-symbols-outlined text-slate-400 dark:text-slate-500">mail</span>
+</div>
+</div>
+</div>
+<!-- Password -->
+<div class="flex flex-col gap-2">
+<label class="text-slate-900 dark:text-slate-200 text-sm font-semibold leading-normal">
+                        Password
+                    </label>
+<div class="flex w-full items-stretch rounded-xl overflow-hidden shadow-sm transition-all focus-within:ring-2 focus-within:ring-primary/50">
+<input class="flex-1 w-full min-w-0 h-14 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 border-r-0 rounded-l-xl px-4 text-base text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-slate-200 dark:focus:border-slate-700 focus:ring-0" placeholder="Minimal 8 karakter" type="password"/>
+<div class="flex items-center justify-center px-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 border-l-0 rounded-r-xl cursor-pointer group">
+<span class="material-symbols-outlined text-slate-400 dark:text-slate-500 group-hover:text-primary transition-colors">lock</span>
+</div>
+</div>
+</div>
+<!-- Konfirmasi Password -->
+<div class="flex flex-col gap-2">
+<label class="text-slate-900 dark:text-slate-200 text-sm font-semibold leading-normal">
+                        Konfirmasi Password
+                    </label>
+<div class="flex w-full items-stretch rounded-xl overflow-hidden shadow-sm transition-all focus-within:ring-2 focus-within:ring-primary/50">
+<input class="flex-1 w-full min-w-0 h-14 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 border-r-0 rounded-l-xl px-4 text-base text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-slate-200 dark:focus:border-slate-700 focus:ring-0" placeholder="Ulangi password" type="password"/>
+<div class="flex items-center justify-center px-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 border-l-0 rounded-r-xl cursor-pointer group">
+<span class="material-symbols-outlined text-slate-400 dark:text-slate-500 group-hover:text-primary transition-colors">lock_reset</span>
+</div>
+</div>
+</div>
+<!-- Submit Button -->
+<div class="pt-4">
+<button class="w-full h-14 bg-primary hover:bg-primary/90 active:scale-[0.98] transition-all rounded-full flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
+<span class="text-background-dark text-base font-bold tracking-wide">Daftar Sekarang</span>
+</button>
+</div>
+</form>
+<!-- Divider -->
+<div class="relative py-8 flex items-center justify-center">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-slate-200 dark:border-slate-700"></div>
+</div>
+<div class="relative bg-white dark:bg-background-dark px-4">
+<span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Atau daftar dengan</span>
+</div>
+</div>
+<!-- Social Logins -->
+<div class="grid grid-cols-2 gap-4">
+<button class="flex items-center justify-center h-12 gap-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<img alt="Google Logo" class="w-5 h-5" data-alt="Google G logo in standard colors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANF7SgrO6XTQ7cog18Pl0mX_s1f8NBq5xH83srf8oCysVLJ_7PJIZW01OrYTqxG9tny1GfiQBH8kfMB2WIfKm8wonrRav_juGrz9smNMxuLRzS4EoTBO-hh28pl7POBHvkOrYtuxIICZ_APqtRxYCzHFEFgcw4OuaMnF3l5CMEiqG6QtPCR7QoltWHKjCJtQbCMpmKAMNs8j0Nb9FGi9h7e26vSyJIJhskC3izTSXjTYPaGeWK-y4rR_p3yAl5BgSE6mOn_q5zLe0"/>
+<span class="text-sm font-semibold text-slate-700 dark:text-slate-200">Google</span>
+</button>
+<button class="flex items-center justify-center h-12 gap-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<span class="text-slate-900 dark:text-white text-xl">
+<i class="fa-brands fa-apple"></i> <!-- Using material icon instead for purity -->
+<span class="material-symbols-outlined text-[22px] align-middle">desktop_mac</span>
+</span>
+<span class="text-sm font-semibold text-slate-700 dark:text-slate-200">Apple</span>
+</button>
+</div>
+<!-- Footer Login Link -->
+<div class="mt-auto pt-8 text-center">
+<p class="text-slate-500 dark:text-slate-400 text-sm">
+                    Sudah punya akun? 
+                    <a class="font-bold text-slate-900 dark:text-primary hover:underline decoration-primary underline-offset-4" href="#">Masuk</a>
+</p>
+</div>
+</main>
+</div>
+</body></html>
