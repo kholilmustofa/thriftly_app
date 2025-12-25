@@ -209,6 +209,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontWeight: FontWeight.w400,
                   ),
                   border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 0,
                     vertical: 14,
