@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "349227748774",
+    "project_id": "artaku-finance-app",
+    "storage_bucket": "artaku-finance-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:349227748774:android:43bb97f1305fd203499367",
+        "android_client_info": {
+          "package_name": "com.example.thriftly_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWuSN7cCDqwM_dP7VZzvLSHEJxS_Z9kL8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
