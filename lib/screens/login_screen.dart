@@ -187,23 +187,49 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _handleSocialLogin(String provider) async {
-    // Note: Social login requires additional setup:
-    // - Google Sign-In: google_sign_in package + SHA-1 configuration
-    // - Apple Sign-In: sign_in_with_apple package + Apple Developer setup
+    if (provider != 'Google') return;
 
-    if (!mounted) return;
+    setState(() {
+      _isLoading = true;
+    });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'Login dengan $provider akan tersedia segera.\n'
-          'Saat ini gunakan Email/Password untuk masuk.',
+    try {
+      final authService = context.read<AuthService>();
+      await authService.signInWithGoogle();
+
+      if (!mounted) return;
+
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Login dengan Google berhasil!'),
+          backgroundColor: AppTheme.primary,
+          behavior: SnackBarBehavior.floating,
         ),
-        backgroundColor: Colors.orange,
-        behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 3),
-      ),
-    );
+      );
+
+      // Navigate to home
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => const HomeScreen()));
+    } catch (e) {
+      if (!mounted) return;
+
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   @override
@@ -488,13 +514,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 24),
 
                       // Social login buttons
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _buildSocialButton(Icons.g_mobiledata, 'Google'),
-                          const SizedBox(width: 16),
-                          _buildSocialButton(Icons.apple, 'Apple'),
-                        ],
+                      Center(
+                        child: _buildSocialButton(Icons.g_mobiledata, 'Google'),
                       ),
 
                       const SizedBox(height: 32),
