@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:thriftly_app/config/app_theme.dart';
 import 'package:thriftly_app/models/product_model.dart';
@@ -22,11 +23,12 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   final _brandController = TextEditingController();
   final _sizeController = TextEditingController();
 
-  String _selectedCategory = ProductCategories.pakaian;
-  String _selectedCondition = ProductConditions.good;
-  List<File> _selectedImages = [];
+  final List<File> _selectedImages = [];
+  String _selectedCategory = '';
+  String _selectedCondition = 'Like New';
   bool _isUploading = false;
-  double _uploadProgress = 0.0;
+
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void dispose() {
@@ -39,17 +41,22 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   }
 
   Future<void> _pickImages() async {
-    final storageService = context.read<StorageService>();
-    try {
-      final files = await storageService.pickMultipleImages(maxImages: 5);
+    if (_selectedImages.length >= 5) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Maksimal 5 foto')));
+      return;
+    }
+
+    final List<XFile> images = await _picker.pickMultiImage();
+    if (images.isNotEmpty) {
       setState(() {
-        _selectedImages = files;
+        for (var image in images) {
+          if (_selectedImages.length < 5) {
+            _selectedImages.add(File(image.path));
+          }
+        }
       });
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
-      );
     }
   }
 
@@ -61,20 +68,21 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
 
   Future<void> _uploadProduct() async {
     if (!_formKey.currentState!.validate()) return;
-
     if (_selectedImages.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Pilih minimal 1 gambar produk'),
-          backgroundColor: Colors.orange,
-        ),
+        const SnackBar(content: Text('Tambahkan minimal 1 foto produk')),
       );
+      return;
+    }
+    if (_selectedCategory.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Pilih kategori produk')));
       return;
     }
 
     setState(() {
       _isUploading = true;
-      _uploadProgress = 0.0;
     });
 
     try {
@@ -82,74 +90,58 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
       final storageService = context.read<StorageService>();
       final firestoreService = context.read<FirestoreService>();
 
-      // Check if user is logged in
-      if (authService.currentUser == null) {
-        throw 'Anda harus login terlebih dahulu';
+      final user = authService.currentUser;
+      if (user == null) throw 'User tidak ditemukan';
+
+      // Upload images
+      final List<String> imageUrls = [];
+      final tempProductId = DateTime.now().millisecondsSinceEpoch.toString();
+      for (var image in _selectedImages) {
+        final url = await storageService.uploadImage(
+          file: image,
+          path: 'products/$tempProductId',
+        );
+        imageUrls.add(url);
       }
 
-      // 1. Upload images to Firebase Storage
-      final productId = DateTime.now().millisecondsSinceEpoch.toString();
-      final imageUrls = await storageService.uploadProductImages(
-        images: _selectedImages,
-        productId: productId,
-        onProgress: (current, total) {
-          setState(() {
-            _uploadProgress = current / total;
-          });
-        },
-      );
-
-      // 2. Create product model
+      // Create product
       final product = ProductModel(
-        id: productId,
+        id: '',
         name: _nameController.text.trim(),
         description: _descriptionController.text.trim(),
         price: double.parse(_priceController.text.trim()),
         category: _selectedCategory,
-        images: imageUrls,
-        sellerId: authService.currentUser!.uid,
-        sellerName: authService.currentUser!.displayName ?? 'Unknown',
         condition: _selectedCondition,
-        size: _sizeController.text.trim().isNotEmpty
-            ? _sizeController.text.trim()
-            : null,
-        brand: _brandController.text.trim().isNotEmpty
-            ? _brandController.text.trim()
-            : null,
+        size: _sizeController.text.trim(),
+        brand: _brandController.text.trim(),
+        images: imageUrls,
+        sellerId: user.uid,
+        sellerName: user.displayName ?? 'User',
         createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
       );
 
-      // 3. Save to Firestore
       await firestoreService.createProduct(product);
 
       if (!mounted) return;
 
-      // 4. Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Produk berhasil diupload! 🎉'),
+          content: Text('Produk berhasil ditambahkan!'),
           backgroundColor: AppTheme.primary,
-          behavior: SnackBarBehavior.floating,
         ),
       );
 
-      // 5. Navigate back
       Navigator.pop(context);
     } catch (e) {
       if (!mounted) return;
-
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Upload gagal: ${e.toString()}'),
-          backgroundColor: Colors.red,
-          behavior: SnackBarBehavior.floating,
-        ),
+        SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
       );
     } finally {
       if (mounted) {
         setState(() {
           _isUploading = false;
-          _uploadProgress = 0.0;
         });
       }
     }
@@ -158,162 +150,102 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundLight,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppTheme.textMain),
+          icon: const Icon(Icons.close, color: AppTheme.textMain),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
-          'Upload Produk',
+          'Jual Barang',
           style: TextStyle(
             color: AppTheme.textMain,
             fontWeight: FontWeight.bold,
+            fontSize: 18,
           ),
         ),
         centerTitle: true,
-      ),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            // Image picker section
-            _buildImageSection(),
-            const SizedBox(height: 24),
-
-            // Product name
-            _buildTextField(
-              controller: _nameController,
-              label: 'Nama Produk',
-              hint: 'Contoh: Jaket Denim Vintage',
-              validator: (v) => v?.isEmpty ?? true ? 'Nama wajib diisi' : null,
-            ),
-            const SizedBox(height: 16),
-
-            // Category
-            _buildDropdown(
-              label: 'Kategori',
-              value: _selectedCategory,
-              items: ProductCategories.all,
-              onChanged: (val) => setState(() => _selectedCategory = val!),
-            ),
-            const SizedBox(height: 16),
-
-            // Price
-            _buildTextField(
-              controller: _priceController,
-              label: 'Harga (Rp)',
-              hint: '150000',
-              keyboardType: TextInputType.number,
-              validator: (v) {
-                if (v?.isEmpty ?? true) return 'Harga wajib diisi';
-                if (double.tryParse(v!) == null) return 'Harga tidak valid';
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
-
-            // Condition
-            _buildDropdown(
-              label: 'Kondisi',
-              value: _selectedCondition,
-              items: ProductConditions.all,
-              onChanged: (val) => setState(() => _selectedCondition = val!),
-            ),
-            const SizedBox(height: 16),
-
-            // Brand (optional)
-            _buildTextField(
-              controller: _brandController,
-              label: 'Brand (Opsional)',
-              hint: 'Contoh: Uniqlo, H&M, Zara',
-              required: false,
-            ),
-            const SizedBox(height: 16),
-
-            // Size (optional)
-            _buildTextField(
-              controller: _sizeController,
-              label: 'Ukuran (Opsional)',
-              hint: 'Contoh: L, M, XL',
-              required: false,
-            ),
-            const SizedBox(height: 16),
-
-            // Description
-            _buildTextField(
-              controller: _descriptionController,
-              label: 'Deskripsi',
-              hint: 'Tulis deskripsi produk secara detail...',
-              maxLines: 5,
-              validator: (v) =>
-                  v?.isEmpty ?? true ? 'Deskripsi wajib diisi' : null,
-            ),
-            const SizedBox(height: 32),
-
-            // Upload button
-            SizedBox(
-              height: 56,
-              child: ElevatedButton(
-                onPressed: _isUploading ? null : _uploadProduct,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primary,
-                  foregroundColor: AppTheme.backgroundDark,
-                  disabledBackgroundColor: AppTheme.primary.withValues(
-                    alpha: 0.5,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: _isUploading
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                AppTheme.backgroundDark,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Text(
-                            'Uploading ${(_uploadProgress * 100).toStringAsFixed(0)}%',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      )
-                    : const Text(
-                        'Upload Produk',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+        actions: [
+          TextButton(
+            onPressed: _isUploading ? null : _uploadProduct,
+            child: Text(
+              'Simpan',
+              style: TextStyle(
+                color: _isUploading ? Colors.grey : AppTheme.primary,
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
               ),
             ),
-            const SizedBox(height: 16),
-          ],
-        ),
+          ),
+        ],
       ),
+      body: _isUploading
+          ? const Center(child: CircularProgressIndicator())
+          : Form(
+              key: _formKey,
+              child: ListView(
+                padding: const EdgeInsets.all(16),
+                children: [
+                  // Foto Produk Section
+                  _buildPhotoSection(),
+                  const SizedBox(height: 24),
+
+                  // Detail Produk Section
+                  _buildDetailSection(),
+                  const SizedBox(height: 100),
+                ],
+              ),
+            ),
+      bottomNavigationBar: _isUploading
+          ? null
+          : Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, -5),
+                  ),
+                ],
+              ),
+              child: SafeArea(
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                  child: ElevatedButton(
+                    onPressed: _uploadProduct,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.primary,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: const Text(
+                      'Terbitkan Sekarang',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
     );
   }
 
-  Widget _buildImageSection() {
+  Widget _buildPhotoSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
               'Foto Produk',
@@ -323,9 +255,8 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                 color: AppTheme.textMain,
               ),
             ),
-            const SizedBox(width: 8),
             Text(
-              '(${_selectedImages.length}/5)',
+              '${_selectedImages.length}/5',
               style: const TextStyle(
                 fontSize: 14,
                 color: AppTheme.textSecondary,
@@ -333,148 +264,174 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
             ),
           ],
         ),
-        const SizedBox(height: 8),
-        const Text(
-          'Upload minimal 1 foto, maksimal 5 foto',
-          style: TextStyle(fontSize: 12, color: AppTheme.textSecondary),
-        ),
         const SizedBox(height: 12),
-
-        // Image grid
-        _selectedImages.isEmpty ? _buildAddImageButton() : _buildImageGrid(),
+        SizedBox(
+          height: 120,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: [
+              // Add Photo Button
+              GestureDetector(
+                onTap: _pickImages,
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE8F5F3),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: AppTheme.primary.withValues(alpha: 0.3),
+                      width: 2,
+                      style: BorderStyle.solid,
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.add_photo_alternate,
+                        color: AppTheme.primary,
+                        size: 32,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Tambah Foto',
+                        style: TextStyle(
+                          color: AppTheme.primary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              // Selected Images
+              ..._selectedImages.asMap().entries.map((entry) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: Stack(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.file(
+                          entry.value,
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Positioned(
+                        top: 4,
+                        right: 4,
+                        child: GestureDetector(
+                          onTap: () => _removeImage(entry.key),
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (entry.key == 0)
+                        Positioned(
+                          bottom: 4,
+                          left: 4,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withValues(alpha: 0.6),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: const Text(
+                              'Cover',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                );
+              }),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Tips: Foto yang cerah dan jelas laku lebih cepat!',
+          style: TextStyle(
+            fontSize: 12,
+            color: AppTheme.textSecondary.withValues(alpha: 0.7),
+          ),
+        ),
       ],
     );
   }
 
-  Widget _buildAddImageButton() {
-    return InkWell(
-      onTap: _pickImages,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        height: 150,
-        decoration: BoxDecoration(
-          color: AppTheme.surfaceLight,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: AppTheme.textSecondary.withValues(alpha: 0.3),
-            width: 2,
-            strokeAlign: BorderSide.strokeAlignInside,
-            style: BorderStyle.solid,
+  Widget _buildDetailSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Detail Produk',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: AppTheme.textMain,
           ),
         ),
-        child: const Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.add_photo_alternate_outlined,
-              size: 48,
-              color: AppTheme.textSecondary,
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Pilih Gambar',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: AppTheme.textSecondary,
-              ),
-            ),
-          ],
+        const SizedBox(height: 16),
+
+        // Nama Produk
+        _buildTextField(
+          controller: _nameController,
+          label: 'Nama Produk',
+          hint: 'Contoh: Kemeja Flannel Uniqlo Size L',
         ),
-      ),
-    );
-  }
+        const SizedBox(height: 16),
 
-  Widget _buildImageGrid() {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
-      ),
-      itemCount: _selectedImages.length < 5
-          ? _selectedImages.length + 1
-          : _selectedImages.length,
-      itemBuilder: (context, index) {
-        // Add image button
-        if (index == _selectedImages.length && _selectedImages.length < 5) {
-          return InkWell(
-            onTap: _pickImages,
-            borderRadius: BorderRadius.circular(12),
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppTheme.surfaceLight,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: AppTheme.textSecondary.withValues(alpha: 0.3),
-                ),
-              ),
-              child: const Icon(
-                Icons.add,
-                size: 32,
-                color: AppTheme.textSecondary,
-              ),
-            ),
-          );
-        }
+        // Kategori
+        _buildCategorySelector(),
+        const SizedBox(height: 16),
 
-        // Image preview
-        return Stack(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.file(
-                _selectedImages[index],
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: double.infinity,
-              ),
-            ),
-            // Remove button
-            Positioned(
-              top: 4,
-              right: 4,
-              child: InkWell(
-                onTap: () => _removeImage(index),
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: const BoxDecoration(
-                    color: Colors.black54,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.close, size: 16, color: Colors.white),
-                ),
-              ),
-            ),
-            // Primary badge
-            if (index == 0)
-              Positioned(
-                bottom: 4,
-                left: 4,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppTheme.primary,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: const Text(
-                    'Utama',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: AppTheme.backgroundDark,
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        );
-      },
+        // Kondisi Barang
+        _buildConditionSelector(),
+        const SizedBox(height: 16),
+
+        // Deskripsi
+        _buildTextField(
+          controller: _descriptionController,
+          label: 'Deskripsi',
+          hint:
+              'Jelaskan detail ukuran (P x L), bahan, dan minus barang jika ada...',
+          maxLines: 5,
+        ),
+        const SizedBox(height: 16),
+
+        // Harga
+        _buildTextField(
+          controller: _priceController,
+          label: 'Harga',
+          hint: 'Rp  0',
+          keyboardType: TextInputType.number,
+          prefix: const Text('Rp '),
+        ),
+      ],
     );
   }
 
@@ -482,64 +439,9 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
     required TextEditingController controller,
     required String label,
     required String hint,
-    bool required = true,
     int maxLines = 1,
     TextInputType? keyboardType,
-    String? Function(String?)? validator,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: AppTheme.textMain,
-              ),
-            ),
-            if (!required)
-              const Text(
-                ' (Opsional)',
-                style: TextStyle(fontSize: 12, color: AppTheme.textSecondary),
-              ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
-          controller: controller,
-          keyboardType: keyboardType,
-          maxLines: maxLines,
-          decoration: InputDecoration(
-            hintText: hint,
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFFDCE5E0)),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFFDCE5E0)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppTheme.primary, width: 2),
-            ),
-          ),
-          validator: validator,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDropdown({
-    required String label,
-    required String value,
-    required List<String> items,
-    required void Function(String?) onChanged,
+    Widget? prefix,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -547,34 +449,228 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
         Text(
           label,
           style: const TextStyle(
-            fontSize: 16,
+            fontSize: 14,
             fontWeight: FontWeight.w600,
             color: AppTheme.textMain,
           ),
         ),
         const SizedBox(height: 8),
-        DropdownButtonFormField<String>(
-          initialValue: value,
+        TextFormField(
+          controller: controller,
+          maxLines: maxLines,
+          keyboardType: keyboardType,
+          style: const TextStyle(fontSize: 14),
           decoration: InputDecoration(
+            hintText: hint,
+            hintStyle: TextStyle(
+              color: AppTheme.textSecondary.withValues(alpha: 0.5),
+              fontSize: 14,
+            ),
+            prefix: prefix,
             filled: true,
-            fillColor: Colors.white,
+            fillColor: const Color(0xFFF5F5F5),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFFDCE5E0)),
+              borderSide: BorderSide.none,
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFFDCE5E0)),
+              borderSide: BorderSide.none,
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppTheme.primary, width: 2),
+              borderSide: const BorderSide(color: AppTheme.primary, width: 1),
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 14,
             ),
           ),
-          items: items
-              .map((item) => DropdownMenuItem(value: item, child: Text(item)))
-              .toList(),
-          onChanged: onChanged,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return '$label wajib diisi';
+            }
+            return null;
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCategorySelector() {
+    final categories = [
+      'Atasan',
+      'Celana',
+      'Jaket',
+      'Sepatu',
+      'Tas',
+      'Aksesoris',
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Kategori',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: AppTheme.textMain,
+          ),
+        ),
+        const SizedBox(height: 8),
+        GestureDetector(
+          onTap: () async {
+            final selected = await showModalBottomSheet<String>(
+              context: context,
+              builder: (context) => Container(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'Pilih Kategori',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ...categories.map(
+                      (cat) => ListTile(
+                        title: Text(cat),
+                        onTap: () => Navigator.pop(context, cat),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+            if (selected != null) {
+              setState(() {
+                _selectedCategory = selected;
+              });
+            }
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF5F5F5),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  _selectedCategory.isEmpty
+                      ? 'Pilih Kategori'
+                      : _selectedCategory,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: _selectedCategory.isEmpty
+                        ? AppTheme.textSecondary.withValues(alpha: 0.5)
+                        : AppTheme.textMain,
+                  ),
+                ),
+                const Icon(Icons.chevron_right, color: AppTheme.textSecondary),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildConditionSelector() {
+    final conditions = [
+      {
+        'label': 'Baru (Tag)',
+        'value': 'Baru (Tag)',
+        'icon': Icons.new_releases,
+      },
+      {'label': 'Like New', 'value': 'Like New', 'icon': Icons.thumb_up},
+      {
+        'label': 'Kondisi Baik',
+        'value': 'Kondisi Baik',
+        'icon': Icons.thumb_up_outlined,
+      },
+      {'label': 'Ada Minus', 'value': 'Ada Minus', 'icon': Icons.warning_amber},
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Kondisi Barang',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: AppTheme.textMain,
+          ),
+        ),
+        const SizedBox(height: 12),
+        GridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 2,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          childAspectRatio: 2.5,
+          children: conditions.map((condition) {
+            final isSelected = _selectedCondition == condition['value'];
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  _selectedCondition = condition['value'] as String;
+                });
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? const Color(0xFFE8F5F3)
+                      : const Color(0xFFF5F5F5),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: isSelected ? AppTheme.primary : Colors.transparent,
+                    width: 1.5,
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      condition['icon'] as IconData,
+                      size: 20,
+                      color: isSelected
+                          ? AppTheme.primary
+                          : AppTheme.textSecondary,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      condition['label'] as String,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: isSelected
+                            ? FontWeight.w600
+                            : FontWeight.w500,
+                        color: isSelected
+                            ? AppTheme.primary
+                            : AppTheme.textMain,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Like New: Bekas pemakaian wajar, warna masih pekat, tidak ada sobek/noda.',
+          style: TextStyle(
+            fontSize: 11,
+            color: AppTheme.textSecondary.withValues(alpha: 0.7),
+          ),
         ),
       ],
     );
