@@ -97,7 +97,7 @@ class _ProductCardState extends State<ProductCard> {
         ClipRRect(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
           child: Container(
-            height: 160, // Reduced from 180
+            height: 160, // Restored to 160px
             width: double.infinity,
             color: Colors.grey.shade100,
             child: widget.product.imageUrl.isNotEmpty

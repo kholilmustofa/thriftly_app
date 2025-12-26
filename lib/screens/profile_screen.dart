@@ -337,7 +337,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         crossAxisCount: 2,
         mainAxisSpacing: 16,
         crossAxisSpacing: 16,
-        childAspectRatio: 0.65,
+        childAspectRatio: 0.60, // Decreased to make cards taller
       ),
       itemCount: products.length,
       itemBuilder: (context, index) {

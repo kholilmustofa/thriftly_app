@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:thriftly_app/config/app_theme.dart';
 import 'package:thriftly_app/models/product.dart';
+import 'package:thriftly_app/models/product_model.dart';
 import 'package:thriftly_app/widgets/product_card.dart';
 import 'package:thriftly_app/widgets/category_chip.dart';
 import 'package:thriftly_app/widgets/promo_banner.dart';
 import 'package:thriftly_app/screens/upload_product_screen.dart';
 import 'package:thriftly_app/screens/search_filter_screen.dart';
 import 'package:thriftly_app/screens/profile_screen.dart';
+import 'package:thriftly_app/services/firestore_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,7 +21,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   String _selectedCategory = 'Semua';
-  final List<Product> _products = Product.getSampleProducts();
+
+  // Use sample products as fallback
+  final List<Product> _sampleProducts = Product.getSampleProducts();
 
   final List<String> _categories = [
     'Semua',
@@ -26,6 +31,8 @@ class _HomeScreenState extends State<HomeScreen> {
     'Celana',
     'Jaket',
     'Sepatu',
+    'Tas',
+    'Aksesoris',
   ];
 
   @override
@@ -402,6 +409,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildNewArrivals() {
+    final firestoreService = context.read<FirestoreService>();
+
     return Column(
       children: [
         Padding(
@@ -431,23 +440,103 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         const SizedBox(height: 12),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 0.65,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-            ),
-            itemCount: _products.length,
-            itemBuilder: (context, index) {
-              return ProductCard(product: _products[index]);
-            },
+
+        // StreamBuilder to fetch products from Firestore
+        StreamBuilder<List<ProductModel>>(
+          stream: firestoreService.getProducts(
+            category: _selectedCategory != 'Semua' ? _selectedCategory : null,
+            limit: 10,
           ),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(32.0),
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+
+            if (snapshot.hasError) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: Column(
+                    children: [
+                      const Icon(
+                        Icons.error_outline,
+                        size: 48,
+                        color: Colors.red,
+                      ),
+                      const SizedBox(height: 16),
+                      Text('Error: ${snapshot.error}'),
+                    ],
+                  ),
+                ),
+              );
+            }
+
+            final products = snapshot.data ?? [];
+
+            // If no products from Firestore, show sample products
+            if (products.isEmpty) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.60,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                  ),
+                  itemCount: _sampleProducts.length,
+                  itemBuilder: (context, index) {
+                    return ProductCard(product: _sampleProducts[index]);
+                  },
+                ),
+              );
+            }
+
+            // Show Firestore products
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.60,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                ),
+                itemCount: products.length,
+                itemBuilder: (context, index) {
+                  final product = products[index];
+                  // Convert ProductModel to Product for ProductCard
+                  return ProductCard(
+                    product: Product(
+                      id: product.id,
+                      name: product.name,
+                      brand: product.brand ?? '',
+                      description: product.description,
+                      price: product.price,
+                      condition: product.condition ?? 'GOOD',
+                      category: product.category,
+                      imageUrl: product.images.isNotEmpty
+                          ? product.images.first
+                          : '',
+                      timeAgo: _getTimeAgo(product.createdAt),
+                      location: '', // ProductModel doesn't have location
+                    ),
+                  );
+                },
+              ),
+            );
+          },
         ),
+
         const SizedBox(height: 16),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -471,6 +560,21 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ],
     );
+  }
+
+  String _getTimeAgo(DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inDays > 0) {
+      return '${difference.inDays} hari lalu';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours} jam lalu';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes} menit lalu';
+    } else {
+      return 'Baru saja';
+    }
   }
 
   Widget _buildBottomNavBar() {
