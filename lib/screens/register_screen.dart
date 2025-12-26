@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:thriftly_app/config/app_theme.dart';
 import 'package:thriftly_app/screens/home_screen.dart';
+import 'package:thriftly_app/services/auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -17,6 +19,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _confirmPasswordController = TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -27,12 +30,54 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  void _handleRegister() {
+  Future<void> _handleRegister() async {
     if (_formKey.currentState!.validate()) {
-      // TODO: Implement actual registration logic
-      Navigator.of(
-        context,
-      ).pushReplacement(MaterialPageRoute(builder: (_) => const HomeScreen()));
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        final authService = context.read<AuthService>();
+
+        await authService.registerWithEmail(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+          name: _nameController.text.trim(),
+        );
+
+        if (!mounted) return;
+
+        // Show success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Registrasi berhasil! 🎉'),
+            backgroundColor: AppTheme.primary,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+
+        // Navigate to home
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const HomeScreen()),
+        );
+      } catch (e) {
+        if (!mounted) return;
+
+        // Show error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString()),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
     }
   }
 
@@ -335,21 +380,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         width: double.infinity,
                         height: 56,
                         child: ElevatedButton(
-                          onPressed: _handleRegister,
+                          onPressed: _isLoading ? null : _handleRegister,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppTheme.primary,
                             foregroundColor: AppTheme.backgroundDark,
+                            disabledBackgroundColor: AppTheme.primary
+                                .withValues(alpha: 0.6),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          child: const Text(
-                            'Daftar',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          child: _isLoading
+                              ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      AppTheme.backgroundDark,
+                                    ),
+                                  ),
+                                )
+                              : const Text(
+                                  'Daftar',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                         ),
                       ),
 
