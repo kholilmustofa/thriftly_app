@@ -6,6 +6,7 @@ import 'package:thriftly_app/widgets/category_chip.dart';
 import 'package:thriftly_app/widgets/promo_banner.dart';
 import 'package:thriftly_app/screens/upload_product_screen.dart';
 import 'package:thriftly_app/screens/search_filter_screen.dart';
+import 'package:thriftly_app/screens/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -506,9 +507,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return InkWell(
       onTap: () {
-        setState(() {
-          _selectedIndex = index;
-        });
+        if (index == 4) {
+          // Navigate to Profile Screen
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const ProfileScreen()),
+          );
+        } else if (index == 1) {
+          // Navigate to Search Screen
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const SearchFilterScreen()),
+          );
+        } else {
+          setState(() {
+            _selectedIndex = index;
+          });
+        }
       },
       child: Column(
         mainAxisSize: MainAxisSize.min,
