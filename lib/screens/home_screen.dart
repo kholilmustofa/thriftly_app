@@ -34,17 +34,17 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Header
+            // Header (stays at top)
             _buildHeader(),
 
-            // Search bar
-            _buildSearchBar(),
-
-            // Main content
+            // Main content (scrollable, including search bar)
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    // Search bar (now scrolls with content)
+                    _buildSearchBar(),
+
                     // Promo carousels
                     const SizedBox(height: 16),
                     _buildPromoSection(),
