@@ -353,6 +353,13 @@ class _ProfileScreenState extends State<ProfileScreen>
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey.shade200),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -365,10 +372,14 @@ class _ProfileScreenState extends State<ProfileScreen>
                   top: Radius.circular(12),
                 ),
                 child: Container(
-                  height: 180,
+                  height: 160, // Reduced from 180
                   width: double.infinity,
                   color: Colors.grey.shade100,
-                  child: const Icon(Icons.image, size: 50, color: Colors.grey),
+                  child: const Icon(
+                    Icons.image_outlined,
+                    size: 50,
+                    color: Colors.grey,
+                  ),
                 ),
               ),
               // Status Badge
@@ -378,8 +389,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                   left: 8,
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
+                      horizontal: 8,
+                      vertical: 4,
                     ),
                     decoration: BoxDecoration(
                       color: Colors.grey.shade700,
@@ -389,8 +400,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                       product['status'],
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 9,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.3,
                       ),
                     ),
                   ),
@@ -400,15 +412,25 @@ class _ProfileScreenState extends State<ProfileScreen>
                 top: 8,
                 right: 8,
                 child: Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: const BoxDecoration(
+                  width: 30,
+                  height: 30,
+                  decoration: BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
-                  child: const Icon(
-                    Icons.favorite_border,
-                    size: 18,
-                    color: AppTheme.textMain,
+                  child: const Center(
+                    child: Icon(
+                      Icons.favorite_border,
+                      size: 16,
+                      color: AppTheme.textSecondary,
+                    ),
                   ),
                 ),
               ),
@@ -417,7 +439,7 @@ class _ProfileScreenState extends State<ProfileScreen>
 
           // Product Info
           Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(10), // Reduced from 12
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -427,23 +449,24 @@ class _ProfileScreenState extends State<ProfileScreen>
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: AppTheme.textMain,
+                    height: 1.2,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 3),
                 Text(
                   '${product['size']} • ${product['condition']}',
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: 10,
                     color: AppTheme.textSecondary.withValues(alpha: 0.7),
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 6),
                 Text(
                   product['price'],
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 15,
                     fontWeight: FontWeight.bold,
                     color: AppTheme.primary,
                   ),

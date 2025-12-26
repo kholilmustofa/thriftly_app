@@ -97,7 +97,7 @@ class _ProductCardState extends State<ProductCard> {
         ClipRRect(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
           child: Container(
-            height: 180,
+            height: 160, // Reduced from 180
             width: double.infinity,
             color: Colors.grey.shade100,
             child: widget.product.imageUrl.isNotEmpty
@@ -121,7 +121,7 @@ class _ProductCardState extends State<ProductCard> {
           top: 8,
           left: 8,
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
               color: _getConditionColor(),
               borderRadius: BorderRadius.circular(6),
@@ -130,9 +130,9 @@ class _ProductCardState extends State<ProductCard> {
               _getConditionLabel(),
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 10,
+                fontSize: 9,
                 fontWeight: FontWeight.w700,
-                letterSpacing: 0.5,
+                letterSpacing: 0.3,
               ),
             ),
           ),
@@ -150,8 +150,8 @@ class _ProductCardState extends State<ProductCard> {
               // TODO: Save to favorites in database
             },
             child: Container(
-              width: 32,
-              height: 32,
+              width: 30,
+              height: 30,
               decoration: BoxDecoration(
                 color: Colors.white,
                 shape: BoxShape.circle,
@@ -166,7 +166,7 @@ class _ProductCardState extends State<ProductCard> {
               child: Center(
                 child: Icon(
                   _isFavorite ? Icons.favorite : Icons.favorite_border,
-                  size: 18,
+                  size: 16,
                   color: _isFavorite ? Colors.red : AppTheme.textSecondary,
                 ),
               ),
@@ -192,7 +192,7 @@ class _ProductCardState extends State<ProductCard> {
 
   Widget _buildInfoSection() {
     return Padding(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(10), // Reduced from 12
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -201,60 +201,60 @@ class _ProductCardState extends State<ProductCard> {
             Text(
               widget.product.brand.toUpperCase(),
               style: TextStyle(
-                fontSize: 11,
+                fontSize: 10,
                 color: AppTheme.textSecondary.withValues(alpha: 0.7),
                 fontWeight: FontWeight.w600,
-                letterSpacing: 0.5,
+                letterSpacing: 0.3,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 3),
           ],
 
           // Product name
           Text(
             widget.product.name,
             style: const TextStyle(
-              fontSize: 14,
+              fontSize: 13,
               fontWeight: FontWeight.w600,
               color: AppTheme.textMain,
-              height: 1.3,
+              height: 1.2,
             ),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
 
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
 
           // Price
           Text(
             'Rp ${_formatPrice(widget.product.price)}',
             style: const TextStyle(
-              fontSize: 16,
+              fontSize: 15,
               fontWeight: FontWeight.bold,
               color: AppTheme.primary,
             ),
           ),
 
-          const SizedBox(height: 6),
+          const SizedBox(height: 4),
 
           // Location and time
           Row(
             children: [
               Icon(
                 Icons.location_on,
-                size: 12,
+                size: 11,
                 color: AppTheme.textSecondary.withValues(alpha: 0.6),
               ),
-              const SizedBox(width: 4),
+              const SizedBox(width: 3),
               Expanded(
                 child: Text(
                   widget.product.location.isNotEmpty
                       ? widget.product.location
                       : 'Jakarta',
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: 10,
                     color: AppTheme.textSecondary.withValues(alpha: 0.7),
                   ),
                   maxLines: 1,
@@ -264,13 +264,14 @@ class _ProductCardState extends State<ProductCard> {
               Text(
                 ' • ',
                 style: TextStyle(
+                  fontSize: 10,
                   color: AppTheme.textSecondary.withValues(alpha: 0.5),
                 ),
               ),
               Text(
                 widget.product.timeAgo,
                 style: TextStyle(
-                  fontSize: 11,
+                  fontSize: 10,
                   color: AppTheme.textSecondary.withValues(alpha: 0.7),
                 ),
               ),
