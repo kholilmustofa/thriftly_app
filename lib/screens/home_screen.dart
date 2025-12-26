@@ -21,6 +21,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   String _selectedCategory = 'Semua';
+  int _productLimit = 10; // Start with 10 products
 
   // Use sample products as fallback
   final List<Product> _sampleProducts = Product.getSampleProducts();
@@ -445,7 +446,7 @@ class _HomeScreenState extends State<HomeScreen> {
         StreamBuilder<List<ProductModel>>(
           stream: firestoreService.getProducts(
             category: _selectedCategory != 'Semua' ? _selectedCategory : null,
-            limit: 10,
+            limit: _productLimit, // Use dynamic limit
           ),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -477,88 +478,122 @@ class _HomeScreenState extends State<HomeScreen> {
             }
 
             final products = snapshot.data ?? [];
+            final hasMore = products.length >= _productLimit;
 
             // If no products from Firestore, show sample products
             if (products.isEmpty) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 0.60,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.60,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 12,
+                          ),
+                      itemCount: _sampleProducts.length,
+                      itemBuilder: (context, index) {
+                        return ProductCard(product: _sampleProducts[index]);
+                      },
+                    ),
                   ),
-                  itemCount: _sampleProducts.length,
-                  itemBuilder: (context, index) {
-                    return ProductCard(product: _sampleProducts[index]);
-                  },
-                ),
+                  const SizedBox(height: 16),
+                  _buildLoadMoreButton(false), // No more sample products
+                ],
               );
             }
 
             // Show Firestore products
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.60,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.60,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                        ),
+                    itemCount: products.length,
+                    itemBuilder: (context, index) {
+                      final product = products[index];
+                      // Convert ProductModel to Product for ProductCard
+                      return ProductCard(
+                        product: Product(
+                          id: product.id,
+                          name: product.name,
+                          brand: product.brand ?? '',
+                          description: product.description,
+                          price: product.price,
+                          condition: product.condition ?? 'GOOD',
+                          category: product.category,
+                          imageUrl: product.images.isNotEmpty
+                              ? product.images.first
+                              : '',
+                          timeAgo: _getTimeAgo(product.createdAt),
+                          location: '', // ProductModel doesn't have location
+                        ),
+                      );
+                    },
+                  ),
                 ),
-                itemCount: products.length,
-                itemBuilder: (context, index) {
-                  final product = products[index];
-                  // Convert ProductModel to Product for ProductCard
-                  return ProductCard(
-                    product: Product(
-                      id: product.id,
-                      name: product.name,
-                      brand: product.brand ?? '',
-                      description: product.description,
-                      price: product.price,
-                      condition: product.condition ?? 'GOOD',
-                      category: product.category,
-                      imageUrl: product.images.isNotEmpty
-                          ? product.images.first
-                          : '',
-                      timeAgo: _getTimeAgo(product.createdAt),
-                      location: '', // ProductModel doesn't have location
-                    ),
-                  );
-                },
-              ),
+                const SizedBox(height: 16),
+                _buildLoadMoreButton(hasMore),
+              ],
             );
           },
         ),
+      ],
+    );
+  }
 
-        const SizedBox(height: 16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: OutlinedButton(
-            onPressed: () {},
-            style: OutlinedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 48),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              side: const BorderSide(color: AppTheme.textSecondary),
-            ),
-            child: const Text(
-              'Muat Lebih Banyak',
-              style: TextStyle(
-                color: AppTheme.textSecondary,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+  Widget _buildLoadMoreButton(bool hasMore) {
+    if (!hasMore) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Text(
+          'Semua produk sudah ditampilkan',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: AppTheme.textSecondary.withValues(alpha: 0.7),
+            fontSize: 14,
           ),
         ),
-      ],
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: OutlinedButton(
+        onPressed: () {
+          setState(() {
+            _productLimit += 10; // Load 10 more products
+          });
+        },
+        style: OutlinedButton.styleFrom(
+          minimumSize: const Size(double.infinity, 48),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          side: const BorderSide(color: AppTheme.textSecondary),
+        ),
+        child: const Text(
+          'Muat Lebih Banyak',
+          style: TextStyle(
+            color: AppTheme.textSecondary,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
     );
   }
 

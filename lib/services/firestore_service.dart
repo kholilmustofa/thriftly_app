@@ -16,23 +16,31 @@ class FirestoreService {
     String? searchQuery,
     int limit = 20,
   }) {
+    // Only order by createdAt to avoid composite index requirement
+    // Category filtering will be done client-side
     Query query = _productsRef.orderBy('createdAt', descending: true);
 
-    // Filter by category
-    if (category != null && category.isNotEmpty) {
-      query = query.where('category', isEqualTo: category);
-    }
-
-    // Limit results
-    query = query.limit(limit);
+    // Limit results (get more if filtering by category)
+    query = query.limit(
+      category != null && category.isNotEmpty ? limit * 3 : limit,
+    );
 
     return query.snapshots().map((snapshot) {
       return snapshot.docs
-          .map(
-            (doc) =>
-                ProductModel.fromFirestore(doc.data() as Map<String, dynamic>),
-          )
+          .map((doc) {
+            final data = doc.data() as Map<String, dynamic>;
+            // Add document ID to data
+            data['id'] = doc.id;
+            return ProductModel.fromFirestore(data);
+          })
           .where((product) {
+            // Filter by category (client-side)
+            if (category != null && category.isNotEmpty) {
+              if (product.category != category) {
+                return false;
+              }
+            }
+
             // Filter by search query (client-side)
             if (searchQuery != null && searchQuery.isNotEmpty) {
               return product.name.toLowerCase().contains(
@@ -44,6 +52,7 @@ class FirestoreService {
             }
             return true;
           })
+          .take(limit) // Limit after filtering
           .toList();
     });
   }

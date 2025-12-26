@@ -63,7 +63,7 @@ class ProductModel {
   /// Convert ProductModel to Firestore document
   Map<String, dynamic> toFirestore() {
     return {
-      'id': id,
+      // Don't include 'id' in document data - it's the document ID
       'name': name,
       'description': description,
       'price': price,
@@ -78,7 +78,7 @@ class ProductModel {
       'views': views,
       'likes': likes,
       'createdAt': FieldValue.serverTimestamp(),
-      'updatedAt': updatedAt != null ? Timestamp.fromDate(updatedAt!) : null,
+      'updatedAt': FieldValue.serverTimestamp(),
     };
   }
 
