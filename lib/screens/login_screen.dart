@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:thriftly_app/config/app_theme.dart';
 import 'package:thriftly_app/screens/register_screen.dart';
 import 'package:thriftly_app/screens/home_screen.dart';
+import 'package:thriftly_app/services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -31,15 +33,12 @@ class _LoginScreenState extends State<LoginScreen> {
       });
 
       try {
-        // Simulate API call
-        await Future.delayed(const Duration(seconds: 2));
+        final authService = context.read<AuthService>();
 
-        // TODO: Replace with actual authentication API call
-        // Example:
-        // final response = await AuthService.login(
-        //   email: _emailController.text,
-        //   password: _passwordController.text,
-        // );
+        await authService.loginWithEmail(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
 
         if (!mounted) return;
 
@@ -135,22 +134,42 @@ class _LoginScreenState extends State<LoginScreen> {
           ElevatedButton(
             onPressed: () async {
               if (formKey.currentState!.validate()) {
-                // TODO: Implement actual password reset API call
-                // await AuthService.resetPassword(emailController.text);
+                // Save references before async gap
+                final navigator = Navigator.of(context);
+                final messenger = ScaffoldMessenger.of(context);
+                final authService = context.read<AuthService>();
 
-                Navigator.pop(context);
+                try {
+                  await authService.resetPassword(
+                    email: emailController.text.trim(),
+                  );
 
-                if (!mounted) return;
+                  navigator.pop();
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      'Link reset password telah dikirim ke email Anda.',
+                  if (!mounted) return;
+
+                  messenger.showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'Link reset password telah dikirim ke email Anda.',
+                      ),
+                      backgroundColor: AppTheme.primary,
+                      behavior: SnackBarBehavior.floating,
                     ),
-                    backgroundColor: AppTheme.primary,
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
+                  );
+                } catch (e) {
+                  navigator.pop();
+
+                  if (!mounted) return;
+
+                  messenger.showSnackBar(
+                    SnackBar(
+                      content: Text(e.toString()),
+                      backgroundColor: Colors.red,
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                }
               }
             },
             style: ElevatedButton.styleFrom(
@@ -168,53 +187,23 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _handleSocialLogin(String provider) async {
-    try {
-      // Show loading indicator
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Mencoba login dengan $provider...'),
-          duration: const Duration(seconds: 1),
-          behavior: SnackBarBehavior.floating,
+    // Note: Social login requires additional setup:
+    // - Google Sign-In: google_sign_in package + SHA-1 configuration
+    // - Apple Sign-In: sign_in_with_apple package + Apple Developer setup
+
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Login dengan $provider akan tersedia segera.\n'
+          'Saat ini gunakan Email/Password untuk masuk.',
         ),
-      );
-
-      // TODO: Implement actual social login
-      // Example for Google:
-      // if (provider == 'Google') {
-      //   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      //   final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-      //   // Use googleAuth.accessToken and googleAuth.idToken
-      // }
-      // Example for Apple:
-      // if (provider == 'Apple') {
-      //   final credential = await SignInWithApple.getAppleIDCredential(...);
-      //   // Use credential data
-      // }
-
-      await Future.delayed(const Duration(seconds: 1));
-
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Login dengan $provider akan tersedia segera. Fitur sedang dalam pengembangan.',
-          ),
-          backgroundColor: Colors.orange,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-    } catch (e) {
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Login dengan $provider gagal: ${e.toString()}'),
-          backgroundColor: Colors.red,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-    }
+        backgroundColor: Colors.orange,
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 3),
+      ),
+    );
   }
 
   @override
