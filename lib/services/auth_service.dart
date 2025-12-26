@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 /// Authentication service untuk handle semua operasi login/register
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   // Get current user
   User? get currentUser => _auth.currentUser;
@@ -67,7 +69,10 @@ class AuthService {
   /// Logout
   Future<void> logout() async {
     try {
-      await _auth.signOut();
+      await Future.wait([
+        _auth.signOut(),
+        _googleSignIn.signOut(), // Sign out from Google too
+      ]);
     } catch (e) {
       throw 'Logout gagal: $e';
     }
@@ -123,6 +128,63 @@ class AuthService {
     }
   }
 
+  /// Sign In dengan Google
+  Future<UserCredential> signInWithGoogle() async {
+    try {
+      // Trigger Google Sign In flow
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+
+      if (googleUser == null) {
+        throw 'Login dengan Google dibatalkan';
+      }
+
+      // Obtain auth details
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      // Create credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Sign in to Firebase with credential
+      final UserCredential userCredential = await _auth.signInWithCredential(
+        credential,
+      );
+
+      // Create or update user document in Firestore
+      if (userCredential.user != null) {
+        final userDoc = await _firestore
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .get();
+
+        if (!userDoc.exists) {
+          // New user, create document
+          await _firestore
+              .collection('users')
+              .doc(userCredential.user!.uid)
+              .set({
+                'uid': userCredential.user!.uid,
+                'name': userCredential.user!.displayName ?? 'User',
+                'email': userCredential.user!.email ?? '',
+                'photoUrl': userCredential.user!.photoURL,
+                'createdAt': FieldValue.serverTimestamp(),
+                'phoneNumber': null,
+                'address': null,
+              });
+        }
+      }
+
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      throw _handleAuthException(e);
+    } catch (e) {
+      throw 'Login dengan Google gagal: $e';
+    }
+  }
+
   /// Handle Firebase Auth Exceptions
   String _handleAuthException(FirebaseAuthException e) {
     switch (e.code) {
@@ -148,26 +210,4 @@ class AuthService {
         return e.message ?? 'Terjadi kesalahan: ${e.code}';
     }
   }
-
-  // TODO: Implement Google Sign In
-  // Future<UserCredential> signInWithGoogle() async {
-  //   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-  //   final GoogleSignInAuthentication? googleAuth =
-  //       await googleUser?.authentication;
-  //   final credential = GoogleAuthProvider.credential(
-  //     accessToken: googleAuth?.accessToken,
-  //     idToken: googleAuth?.idToken,
-  //   );
-  //   return await _auth.signInWithCredential(credential);
-  // }
-
-  // TODO: Implement Apple Sign In
-  // Future<UserCredential> signInWithApple() async {
-  //   final appleCredential = await SignInWithApple.getAppleIDCredential(...);
-  //   final oauthCredential = OAuthProvider("apple.com").credential(
-  //     idToken: appleCredential.identityToken,
-  //     accessToken: appleCredential.authorizationCode,
-  //   );
-  //   return await _auth.signInWithCredential(oauthCredential);
-  // }
 }
