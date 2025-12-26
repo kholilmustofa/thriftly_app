@@ -485,10 +485,10 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildNavItem(Icons.home, 'Home', 0, filled: true),
+              _buildNavItem(Icons.home, 'Beranda', 0, filled: true),
               _buildNavItem(Icons.search, 'Cari', 1),
               const SizedBox(width: 48), // Space for floating button
-              _buildNavItem(Icons.favorite_border, 'Suka', 3),
+              _buildNavItem(Icons.chat_bubble_outline, 'Chat', 3),
               _buildNavItem(Icons.person_outline, 'Akun', 4),
             ],
           ),
