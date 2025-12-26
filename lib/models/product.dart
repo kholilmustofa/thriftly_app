@@ -8,6 +8,7 @@ class Product {
   final String category; // Atasan, Celana, Jaket, Sepatu
   final String imageUrl;
   final String timeAgo;
+  final String location;
   final bool isFavorite;
 
   Product({
@@ -20,6 +21,7 @@ class Product {
     required this.category,
     required this.imageUrl,
     required this.timeAgo,
+    this.location = 'Jakarta',
     this.isFavorite = false,
   });
 
@@ -34,6 +36,7 @@ class Product {
       category: json['category'],
       imageUrl: json['imageUrl'],
       timeAgo: json['timeAgo'],
+      location: json['location'] ?? 'Jakarta',
       isFavorite: json['isFavorite'] ?? false,
     );
   }
@@ -49,6 +52,7 @@ class Product {
       'category': category,
       'imageUrl': imageUrl,
       'timeAgo': timeAgo,
+      'location': location,
       'isFavorite': isFavorite,
     };
   }
